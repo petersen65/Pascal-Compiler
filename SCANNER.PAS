@@ -2,12 +2,12 @@
 (* Programmname    : SCANNER.PAS                         *)
 (* Programmautor   : Michael Rippl                       *)
 (* Compiler        : Turbo Pascal V5.0                   *)
-(* Letzte énderung : 13-Jan-1990                         *)
+(* Letzte √Ñnderung : 13-Jan-1990                         *)
 (* Inhalt          : Lexikalische Analyse von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PASCAL.PAS        *)
 (*********************************************************)
 
-(* NÑchstes Zeichen von Quelldatei einlesen und weitergeben *)
+(* N√§chstes Zeichen von Quelldatei einlesen und weitergeben *)
 PROCEDURE NextChar;
 VAR k : INTEGER;
 BEGIN
@@ -16,7 +16,7 @@ BEGIN
       IF eof(source) THEN Fatal(0);                (* Unerwartetes Dateiende  *)
       IF ErrorPos <> 0 THEN PrintErrorSet;         (* Letzte Zeile hat Fehler *)
 
-      LineNumber := LineNumber + 1;                (* Zeilennummer erhîhen    *)
+      LineNumber := LineNumber + 1;                (* Zeilennummer erh√∂hen    *)
       LineLen := 0;
       CharCount := 0;
 
@@ -37,7 +37,7 @@ BEGIN
    Ch := Line[CharCount];
 END; (* NextChar *)
 
-(* Scanner fÅr die lexikalische Analyse *)
+(* Scanner f√ºr die lexikalische Analyse *)
 PROCEDURE InSymbol;
 LABEL 1,                                           (* Anfang von InSymbol     *)
       2;                                           (* String eingelesen       *)
@@ -57,7 +57,7 @@ BEGIN
    e := 0;
    i := 0;
 
-   IF Ch = '+' THEN NextChar                       (* Vorzeichen prÅfen       *)
+   IF Ch = '+' THEN NextChar                       (* Vorzeichen pr√ºfen       *)
    ELSE IF Ch = '-' THEN
    BEGIN
       NextChar;
@@ -73,20 +73,20 @@ BEGIN
 
    IF i > ExpDigit THEN
    BEGIN
-      Error(2);                                    (* Zahl ist zu gro·        *)
+      Error(2);                                    (* Zahl ist zu gro√ü        *)
       e := 0;
    END;
 
    Exponent := Exponent + e * Sign;
 END; (* ReadScale *)
 
-(* Exponent mit in die Realzahl Åbernehmen *)
+(* Exponent mit in die Realzahl √ºbernehmen *)
 PROCEDURE AdjustScale;
 VAR e : INTEGER;
     d,
     t : REAL;
 BEGIN
-   IF k + Exponent > ExpMax THEN Error(2)          (* Zahl ist zu gro·        *)
+   IF k + Exponent > ExpMax THEN Error(2)          (* Zahl ist zu gro√ü        *)
    ELSE IF k + Exponent < ExpMin THEN RealNum := 0 (* Bereich unterschritten  *)
    ELSE
    BEGIN
@@ -110,7 +110,7 @@ BEGIN
    END;
 END; (* AdjustScale *)
 
-(* Wandelt Gro·buchstaben in Kleinbuchstaben um *)
+(* Wandelt Gro√übuchstaben in Kleinbuchstaben um *)
 FUNCTION LowerCase(Letter : CHAR) : CHAR;
 BEGIN
    IF Letter IN ['A'..'Z'] THEN LowerCase := chr(ord(Letter) + 32)
@@ -120,10 +120,10 @@ END; (* LowerCase *)
 BEGIN (* InSymbol *)
    1:
                                                    (* Unerlaubte Symbole und  *)
-                                                   (* Leerstellen Åberlesen   *)
+                                                   (* Leerstellen √ºberlesen   *)
    WHILE ((ord(Ch) > 127) OR (ord(Ch) <= 32)) and (ord(Ch) <> 1) DO NextChar;
 
-   IF ord(Ch) = 1 THEN                             (* Ersatz fÅr Symbol ..    *)
+   IF ord(Ch) = 1 THEN                             (* Ersatz f√ºr Symbol ..    *)
    BEGIN
       Sym := DotDot;
       NextChar;
@@ -152,7 +152,7 @@ BEGIN (* InSymbol *)
          IF Id >= KeyWord[k] THEN i := k + 1;
       UNTIL i > j;
 
-      IF i - 1 > j THEN Sym := KeySymbol[k]        (* SchlÅsselwort gefunden  *)
+      IF i - 1 > j THEN Sym := KeySymbol[k]        (* Schl√ºsselwort gefunden  *)
       ELSE Sym := Identifier;
    END
    ELSE IF Ch IN ['0'..'9'] THEN                   (* Es ist eine Zahl        *)
@@ -171,7 +171,7 @@ BEGIN (* InSymbol *)
       IF k > DigitMax THEN
       BEGIN
          k := 0;
-         Error(2);                                 (* Zahl ist zu gro·        *)
+         Error(2);                                 (* Zahl ist zu gro√ü        *)
       END
       ELSE IF k < DigitMax THEN                    (* Zahl ist in Ordnung     *)
       BEGIN
@@ -185,7 +185,7 @@ BEGIN (* InSymbol *)
       ELSE IF Id > MaxIntStr THEN
       BEGIN
          k := 0;
-         Error(2);                                 (* Zahl ist zu gro·        *)
+         Error(2);                                 (* Zahl ist zu gro√ü        *)
       END
       ELSE
       BEGIN                                        (* DigitMax Stellen        *)
@@ -197,7 +197,7 @@ BEGIN (* InSymbol *)
       BEGIN
          NextChar;
 
-         IF Ch = '.' THEN Ch := chr(1)             (* Ersatz fÅr Symbol ..    *)
+         IF Ch = '.' THEN Ch := chr(1)             (* Ersatz f√ºr Symbol ..    *)
          ELSE
          BEGIN
             Sym := RealConst;                      (* Realkonstante           *)
@@ -219,7 +219,7 @@ BEGIN (* InSymbol *)
             END;
 
             IF Ch = 'e' THEN ReadScale;            (* Exponent einlesen       *)
-            IF Exponent <> 0 THEN AdjustScale;     (* In Realzahl Åbernehmen  *)
+            IF Exponent <> 0 THEN AdjustScale;     (* In Realzahl √ºbernehmen  *)
          END;
       END
       ELSE IF Ch = 'e' THEN
@@ -228,7 +228,7 @@ BEGIN (* InSymbol *)
          RealNum := IntNum;
          Exponent := 0;
          ReadScale;                                (* Exponent einlesen       *)
-         IF Exponent <> 0 THEN AdjustScale;        (* In Realzahl Åbernehmen  *)
+         IF Exponent <> 0 THEN AdjustScale;        (* In Realzahl √ºbernehmen  *)
       END;
    END
    ELSE                                            (* Weder Zahl noch Wort    *)
@@ -266,12 +266,12 @@ BEGIN (* InSymbol *)
       BEGIN
          NextChar;
 
-         IF Ch = '=' THEN                          (* Grî·er gleich           *)
+         IF Ch = '=' THEN                          (* Gr√∂√üer gleich           *)
          BEGIN
             Sym := Geq;
             NextChar;
          END
-         ELSE Sym := Gtr;                          (* Grî·er als              *)
+         ELSE Sym := Gtr;                          (* Gr√∂√üer als              *)
       END;
 
       '.' :
@@ -288,7 +288,7 @@ BEGIN (* InSymbol *)
 
       '''' :                                       (* String                  *)
       BEGIN
-         k := 0;                                   (* StringlÑnge = 0         *)
+         k := 0;                                   (* Stringl√§nge = 0         *)
 
          WHILE TRUE DO                             (* Endlosschleife          *)
          BEGIN
@@ -370,8 +370,8 @@ BEGIN (* InSymbol *)
          NextChar;
       END;
 
-      '$', '%', '@', '', '~', '"', '`', '!', '&', '·', '|', '#', '_', '\',
-      'Ñ', 'é', 'î', 'ô', 'Å', 'ö' :
+      '$', '%', '@', '', '~', '"', '`', '!', '&', '√ü', '|', '#', '_', '\',
+      '√§', '√Ñ', '√∂', '√ñ', '√º', '√ú' :
       BEGIN
          NextChar;
          Error(0);                                 (* Symbol nicht erlaubt    *)
@@ -380,7 +380,7 @@ BEGIN (* InSymbol *)
    END;
 END; (* InSymbol *)
 
-(* Symbole Åberlesen, falls ein Fehler im Quelltext aufgetaucht ist *)
+(* Symbole √ºberlesen, falls ein Fehler im Quelltext aufgetaucht ist *)
 PROCEDURE Skip(Symbols : SymbolSet; Number : INTEGER);
 BEGIN
    Error(Number);

@@ -2,17 +2,17 @@
 (* Programmname    : INITIAL.PAS                                  *)
 (* Programmautor   : Michael Rippl                                *)
 (* Compiler        : Turbo Pascal V5.0                            *)
-(* Letzte énderung : 13-Apr-1990                                  *)
+(* Letzte √Ñnderung : 13-Apr-1990                                  *)
 (* Inhalt          : Initialisierungen und Cleanup von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PASCAL.PAS                 *)
 (******************************************************************)
 
-(* Belegte Resourcen freigeben, vorwÑrtsdeklariert *)
+(* Belegte Resourcen freigeben, vorw√§rtsdeklariert *)
 PROCEDURE CleanUp;
 VAR k     : INTEGER;
 BEGIN
-   close(source);                                  (* Quelldatei schlie·en    *)
-   close(target);                                  (* Zieldatei schlie·en     *)
+   close(source);                                  (* Quelldatei schlie√üen    *)
+   close(target);                                  (* Zieldatei schlie√üen     *)
 
    IF NOT AbleToRun THEN erase(target)             (* Programm fehlerhaft     *)
    ELSE
@@ -34,14 +34,14 @@ BEGIN
 
    FOR k := 0 TO LevelMax DO
    BEGIN
-      DeleteRing(Remember[k]);                     (* Liste komplett lîschen  *)
-      DeleteRing(ForwardCall[k]);                  (* Liste komplett lîschen  *)
+      DeleteRing(Remember[k]);                     (* Liste komplett l√∂schen  *)
+      DeleteRing(ForwardCall[k]);                  (* Liste komplett l√∂schen  *)
    END;
 
    dispose(Code);                                  (* Programm freigeben      *)
 END; (* CleanUp *)
 
-(* öbergebene Parameter an den Compiler ÅberprÅfen *)
+(* √úbergebene Parameter an den Compiler √ºberpr√ºfen *)
 PROCEDURE CheckParameters;
 BEGIN
    write('Pascal Compiler  Version 0.86a  ');
@@ -54,9 +54,9 @@ BEGIN
       halt;
    END;
 
-   (*$I-*)                                         (* I/O öberprÅfung aus     *)
+   (*$I-*)                                         (* I/O √úberpr√ºfung aus     *)
    assign(source, paramstr(1) + '.pas');
-   reset(source);                                  (* Quelldatei îffnen       *)
+   reset(source);                                  (* Quelldatei √∂ffnen       *)
 
    IF ioresult <> 0 THEN
    BEGIN
@@ -64,7 +64,7 @@ BEGIN
       halt;
    END;
 
-   assign(target, paramstr(1) + '.obj');           (* Zieldatei îffnen        *)
+   assign(target, paramstr(1) + '.obj');           (* Zieldatei √∂ffnen        *)
    rewrite(target, 1);                             (* Byteweise schreiben     *)
 
    IF ioresult <> 0 THEN
@@ -82,11 +82,11 @@ VAR i         : INTEGER;
     Criterion : ARRAY [1..6] OF CHAR;
 BEGIN
    Criterion := 'PASCAL';                          (* Zieldateikennung        *)
-   (*$I-*)                                         (* I/O öberprÅfung aus     *)
+   (*$I-*)                                         (* I/O √úberpr√ºfung aus     *)
    blockwrite(target, Criterion, sizeof(Criterion));
-   (*$I+*)                                         (* I/O öberprÅfung an      *)
+   (*$I+*)                                         (* I/O √úberpr√ºfung an      *)
 
-   new(Code);                                      (* Speicher fÅr Programm   *)
+   new(Code);                                      (* Speicher f√ºr Programm   *)
 
    FOR i := 0 TO LevelMax DO
    BEGIN

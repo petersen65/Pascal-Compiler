@@ -2,12 +2,12 @@
 (* Programmname    : SYMTAB.PAS                              *)
 (* Programmautor   : Michael Rippl                           *)
 (* Compiler        : Turbo Pascal V5.0                       *)
-(* Letzte énderung : 14-Jan-1990                             *)
+(* Letzte √Ñnderung : 14-Jan-1990                             *)
 (* Inhalt          : Symboltabllen-Verwaltung von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PASCAL.PAS            *)
 (*************************************************************)
 
-(* Ring fÅr Aufnahme von Zeigern erzeugen *)
+(* Ring f√ºr Aufnahme von Zeigern erzeugen *)
 PROCEDURE CreateRing(VAR Head : pRing);
 BEGIN
    new(Head);
@@ -16,13 +16,13 @@ BEGIN
    Head^.Prev := Head;                             (* sich selbst             *)
 END; (* CreateRing *)
 
-(* Ring wird ÅberprÅft, ob er leer ist *)
+(* Ring wird √ºberpr√ºft, ob er leer ist *)
 FUNCTION RingIsEmpty(Head : pRing) : BOOLEAN;
 BEGIN
    RingIsEmpty := Head = Head^.Next;
 END; (* RingIsEmpty *)
 
-(* Element in die Liste einfÅgen *)
+(* Element in die Liste einf√ºgen *)
 PROCEDURE Push(Head : pRing; ObjContent : pNode; TypContent : pType);
 VAR Elt : pRing;
 BEGIN
@@ -33,13 +33,13 @@ BEGIN
       ObjectContent := ObjContent;                 (* Objekt eintragen        *)
       TypeContent := TypContent;                   (* Datentyp eintragen      *)
       Next := Head;                                (* Nachfolger des Elements *)
-      Prev := Head^.Prev;                          (* VorgÑnger des Elements  *)
+      Prev := Head^.Prev;                          (* Vorg√§nger des Elements  *)
    END;
 
    WITH Head^ DO                                   (* Listenkopf              *)
    BEGIN
-      Prev^.Next := Elt;                           (* VorgÑngers Nachfolger   *)
-      Prev := Elt;                                 (* VorgÑnger               *)
+      Prev^.Next := Elt;                           (* Vorg√§ngers Nachfolger   *)
+      Prev := Elt;                                 (* Vorg√§nger               *)
    END;
 END; (* Push *)
 
@@ -56,14 +56,14 @@ BEGIN
       WITH Head^ DO
       BEGIN
          Next := Elt^.Next;                        (* Neuer Nachfolger        *)
-         Next^.Prev := Head;                       (* Nachfolgers VorgÑnger   *)
+         Next^.Prev := Head;                       (* Nachfolgers Vorg√§nger   *)
       END;
 
-      dispose(Elt);                                (* Element lîschen         *)
+      dispose(Elt);                                (* Element l√∂schen         *)
    END;
 END; (* Pop *)
 
-(* Kompletten Ring lîschen *)
+(* Kompletten Ring l√∂schen *)
 PROCEDURE DeleteRing(VAR Head : pRing);
 VAR Elt  : pNode;                                  (* Nur als Dummy           *)
     Elt1 : pType;                                  (* Nur als Dummy           *)
@@ -71,11 +71,11 @@ BEGIN
    WHILE NOT RingIsEmpty(Head) DO
       Pop(Head, Elt, Elt1);                        (* Ring leeren             *)
 
-   dispose(Head);                                  (* Listenkopf lîschen      *)
+   dispose(Head);                                  (* Listenkopf l√∂schen      *)
    Head := NIL;
 END; (* DeleteRing *)
 
-(* Durch Inhalt bestimmtes Objekt suchen und lîschen *)
+(* Durch Inhalt bestimmtes Objekt suchen und l√∂schen *)
 PROCEDURE DeleteElement(Head : pRing; ObjContent : pNode);
 VAR Elt1 : pRing;                                  (* Hilfszeiger             *)
 BEGIN
@@ -87,9 +87,9 @@ BEGIN
       BEGIN
          IF Elt1^.ObjectContent = ObjContent THEN  (* Gesuchtes Element       *)
          BEGIN
-            Elt1^.Prev^.Next := Elt1^.Next;        (* VorgÑngers Nachfolger   *)
-            Elt1^.Next^.Prev := Elt1^.Prev;        (* Nachfolgers VorgÑnger   *)
-            dispose(Elt1);                         (* Element lîschen         *)
+            Elt1^.Prev^.Next := Elt1^.Next;        (* Vorg√§ngers Nachfolger   *)
+            Elt1^.Next^.Prev := Elt1^.Prev;        (* Nachfolgers Vorg√§nger   *)
+            dispose(Elt1);                         (* Element l√∂schen         *)
             Elt1 := Head;
          END
          ELSE Elt1 := Elt1^.Next;
@@ -101,7 +101,7 @@ END; (* Delete Element *)
 PROCEDURE Search(IdName : IdText; Level : INTEGER; VAR Elt : pNode;
                  VAR Found : BOOLEAN);
 
-(* BinÑrbaum nach Bezeichner durchsuchen *)
+(* Bin√§rbaum nach Bezeichner durchsuchen *)
 PROCEDURE Visit(Nd : pNode);
 BEGIN
    IF IdName < Nd^.Name THEN                       (* Im linken Teilbaum      *)
@@ -173,7 +173,7 @@ BEGIN
       END;
 
       Found := FALSE;
-      Push(Remember[Level], Elt, NIL);             (* Zum Lîschen merken      *)
+      Push(Remember[Level], Elt, NIL);             (* Zum L√∂schen merken      *)
    END
    ELSE
    BEGIN
@@ -201,13 +201,13 @@ BEGIN
             Lev := Level;
          END;
 
-         Push(Remember[Level], Elt, NIL);          (* Zum Lîschen merken      *)
+         Push(Remember[Level], Elt, NIL);          (* Zum L√∂schen merken      *)
       END
       ELSE Error(72);                              (* Bereits vorhanden       *)
    END;
 END; (* Insert *)
 
-(* Ein gesamtes Level wird gelîscht *)
+(* Ein gesamtes Level wird gel√∂scht *)
 PROCEDURE DeleteLevel(Level : INTEGER);
 VAR ObjContent,
     ObjContent1 : pNode;
@@ -218,7 +218,7 @@ BEGIN
    BEGIN
       Pop(Remember[Level], ObjContent, TypContent);
 
-      IF ObjContent <> NIL THEN                    (* Objekt zu lîschen       *)
+      IF ObjContent <> NIL THEN                    (* Objekt zu l√∂schen       *)
       BEGIN
          IF ObjContent^.Obj IN [Procedures, Functions] THEN
          BEGIN
@@ -228,17 +228,17 @@ BEGIN
                dispose(ObjContent1);
             END;
 
-            DeleteRing(ObjContent^.Par);           (* Listenkopf lîschen      *)
+            DeleteRing(ObjContent^.Par);           (* Listenkopf l√∂schen      *)
          END;
 
          dispose(ObjContent);
       END;
 
       IF TypContent <> NIL THEN
-         dispose(TypContent);                      (* Datentyp zu lîschen     *)
+         dispose(TypContent);                      (* Datentyp zu l√∂schen     *)
    END;
 
-   Display[Level] := NIL;                          (* Kein BinÑrbaum mehr     *)
+   Display[Level] := NIL;                          (* Kein Bin√§rbaum mehr     *)
 END; (* DeleteLevel *)
 
 (* Bezeichner in gesamter Symboltabelle suchen *)
@@ -275,7 +275,7 @@ BEGIN
          WITH Elt^ DO
          BEGIN
             new(Ref);                              (* Typ-Referenz anlegen    *)
-            Push(Remember[0], NIL, Ref);           (* Zum Lîschen merken      *)
+            Push(Remember[0], NIL, Ref);           (* Zum L√∂schen merken      *)
             Ref^.Size := Address;                  (* Speicherplatzbedarf     *)
             Ref^.Typ := IdType;                    (* Datentyp                *)
          END;
@@ -309,7 +309,7 @@ BEGIN
          END;
 
          Elt^.Adr := Address;
-         CreateRing(Elt^.Par);                     (* Wichtig fÅr CleanUp     *)
+         CreateRing(Elt^.Par);                     (* Wichtig f√ºr CleanUp     *)
       END;
 
       Constants :                                  (* False, True, MaxInt     *)

@@ -2,7 +2,7 @@
 (* Programmname    : STATEMEN.PAS                      *)
 (* Programmautor   : Michael Rippl                     *)
 (* Compiler        : Turbo Pascal V5.0                 *)
-(* Letzte énderung : 07-Mar-1990                       *)
+(* Letzte √Ñnderung : 07-Mar-1990                       *)
 (* Inhalt          : Pascal-Anweisungen von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PARSER.PAS      *)
 (*******************************************************)
@@ -34,14 +34,14 @@ BEGIN
       ELSE
       BEGIN                                        (* Labeladresse unbekannt  *)
          new(GtoRem);
-         Push(Remember[Level], GtoRem, NIL);       (* Zum Lîschen merken      *)
+         Push(Remember[Level], GtoRem, NIL);       (* Zum L√∂schen merken      *)
          GtoRem^ := Elt^;                          (* Inhalt von Label merken *)
 
          WITH GtoRem^ DO
          BEGIN
-            Count := ProgCount;                    (* ProgrammzÑhler merken   *)
-            Correct := StackCorrection;            (* Korrekturwert fÅr Goto  *)
-            LabelAdr := Elt;                       (* Label-Adresse spÑter    *)
+            Count := ProgCount;                    (* Programmz√§hler merken   *)
+            Correct := StackCorrection;            (* Korrekturwert f√ºr Goto  *)
+            LabelAdr := Elt;                       (* Label-Adresse sp√§ter    *)
          END;
 
          Emit(CorrectStack);                       (* Stack Korrektur merken  *)
@@ -115,7 +115,7 @@ END; (* CompoundStatement *)
 PROCEDURE IfStatement;
 VAR Item      : Node;                              (* Ausdruck nach If        *)
     LocCount1,
-    LocCount2 : INTEGER;                           (* ProgrammzÑhler merken   *)
+    LocCount2 : INTEGER;                           (* Programmz√§hler merken   *)
 BEGIN
    InSymbol;                                       (* If schon gelesen        *)
    Expression([ThenSy, DoSy] + Symbols, Item);
@@ -123,7 +123,7 @@ BEGIN
    IF NOT (Item.Typ IN [NoType, Bools]) THEN
       Error(149);                                  (* Typ Boolean erwartet    *)
 
-   LocCount1 := ProgCount;                         (* ProgrammzÑhler merken   *)
+   LocCount1 := ProgCount;                         (* Programmz√§hler merken   *)
    Emit(JumpConditional);                          (* Bedingter Sprung        *)
 
    IF Sym = ThenSy THEN InSymbol
@@ -138,7 +138,7 @@ BEGIN
    IF Sym = ElseSy THEN                            (* If .. Then .. Else      *)
    BEGIN
       InSymbol;
-      LocCount2 := ProgCount;                      (* ProgrammzÑhler merken   *)
+      LocCount2 := ProgCount;                      (* Programmz√§hler merken   *)
       Emit(Jump);                                  (* Unbedingter Sprung      *)
       Code^[LocCount1].y := ProgCount;
       Statement(Symbols);
@@ -153,7 +153,7 @@ VAR Item       : Node;                             (* Ausdruck nach Case      *)
     Labels,                                        (* Anzahl der Labels       *)
     Cases,                                         (* Anzahl der Cases        *)
     k,
-    LocCount   : INTEGER;                          (* ProgrammzÑhler merken   *)
+    LocCount   : INTEGER;                          (* Programmz√§hler merken   *)
 
     CasesTable : ARRAY [1..CaseMax] OF             (* Case-Konstanten         *)
                    RECORD
@@ -169,16 +169,16 @@ VAR Lab : Node;                                    (* Einzelne Case-Konstante *)
 BEGIN
    Constant([Comma, Colon, EndSy] + Symbols, Lab);
 
-   IF Lab.Ref <> Item.Ref THEN Error(152)          (* UnzulÑssiges Case-Label *)
+   IF Lab.Ref <> Item.Ref THEN Error(152)          (* Unzul√§ssiges Case-Label *)
    ELSE IF Labels = CaseMax THEN Fatal(9)          (* Case-Tabelle voll       *)
    ELSE
    BEGIN
       Labels := Labels + 1;
       k := 0;
       CasesTable[Labels].Value := Lab.Value;
-      CasesTable[Labels].Count := ProgCount;       (* ProgrammzÑhler merken   *)
+      CasesTable[Labels].Count := ProgCount;       (* Programmz√§hler merken   *)
 
-      REPEAT                                       (* PrÅfen ob Label doppelt *)
+      REPEAT                                       (* Pr√ºfen ob Label doppelt *)
          k := k + 1;
       UNTIL CasesTable[k].Value = Lab.Value;
 
@@ -205,7 +205,7 @@ BEGIN
       Statement([Semicolon, EndSy] + Symbols);
 
       Cases := Cases + 1;
-      ExitTable[Cases] := ProgCount;               (* ProgrammzÑhler merken   *)
+      ExitTable[Cases] := ProgCount;               (* Programmz√§hler merken   *)
       Emit(Jump);
    END;
 END; (* OneCase *)
@@ -217,9 +217,9 @@ BEGIN (* CaseStatement *)
    Expression([OfSy, Comma, Colon] + Symbols, Item);
 
    IF NOT (Item.Typ IN [NoType, Ints, Bools, Chars, Enumerations]) THEN
-      Error(140);                                  (* UnzulÑssiger Ausdruck   *)
+      Error(140);                                  (* Unzul√§ssiger Ausdruck   *)
 
-   LocCount := ProgCount;                          (* ProgrammzÑhler merken   *)
+   LocCount := ProgCount;                          (* Programmz√§hler merken   *)
    Emit(CaseSwitch);                               (* Switch (JmpX)           *)
 
    IF Sym = OfSy THEN InSymbol
@@ -254,16 +254,16 @@ END; (* CaseStatement *)
 PROCEDURE WhileStatement;
 VAR Item      : Node;                              (* Ausdruck nach While     *)
     LocCount1,
-    LocCount2 : INTEGER;                           (* ProgrammzÑhler merken   *)
+    LocCount2 : INTEGER;                           (* Programmz√§hler merken   *)
 BEGIN
    InSymbol;                                       (* While schon gelesen     *)
-   LocCount1 := ProgCount;                         (* ProgrammzÑhler merken   *)
+   LocCount1 := ProgCount;                         (* Programmz√§hler merken   *)
    Expression([DoSy] + Symbols, Item);
 
    IF NOT (Item.Typ IN [NoType, Bools]) THEN
       Error(149);                                  (* Typ Boolean erwartet    *)
 
-   LocCount2 := ProgCount;                         (* ProgrammzÑhler merken   *)
+   LocCount2 := ProgCount;                         (* Programmz√§hler merken   *)
    Emit(JumpConditional);                          (* Bedingter Sprung        *)
 
    IF Sym = DoSy THEN InSymbol
@@ -277,9 +277,9 @@ END; (* WhileStatement *)
 (* Repeat-Anweisung auswerten *)
 PROCEDURE RepeatStatement;
 VAR Item     : Node;                               (* Ausdruck nach Until     *)
-    LocCount : INTEGER;                            (* ProgrammzÑhler merken   *)
+    LocCount : INTEGER;                            (* Programmz√§hler merken   *)
 BEGIN
-   LocCount := ProgCount;                          (* ProgrammzÑhler merken   *)
+   LocCount := ProgCount;                          (* Programmz√§hler merken   *)
    InSymbol;                                       (* Repeat schon gelesen    *)
 
    WHILE Sym = IntConst DO                         (* Labels auswerten        *)
@@ -315,12 +315,12 @@ END; (* RepeatStatement *)
 PROCEDURE ForStatement;
 VAR CtrlVarType : Types;                           (* Kontrollvariable        *)
     Item,
-    Item2       : Node;                            (* AusdrÅcke               *)
+    Item2       : Node;                            (* Ausdr√ºcke               *)
     Elt         : pNode;
     FoundAt     : INTEGER;
-    OutputCode  : Orders;                          (* öbersetzungscode        *)
+    OutputCode  : Orders;                          (* √úbersetzungscode        *)
     LocCount1,
-    LocCount2   : INTEGER;                         (* ProgrammzÑhler merken   *)
+    LocCount2   : INTEGER;                         (* Programmz√§hler merken   *)
 BEGIN
    InSymbol;                                       (* For schon gelesen       *)
 
@@ -342,7 +342,7 @@ BEGIN
             CtrlVarType := Item.Typ;
 
             IF NOT (CtrlVarType IN [Ints, Bools, Chars, Subranges, Enumerations,
-                    NoType]) THEN Error(150);      (* Typ unzulÑssig          *)
+                    NoType]) THEN Error(150);      (* Typ unzul√§ssig          *)
          END
          ELSE
          BEGIN
@@ -367,9 +367,9 @@ BEGIN
             BEGIN
                IF (Item2.Value < Item.Ref^.RangeLow) OR
                   (Item2.Value > Item.Ref^.RangeHigh) THEN
-                     Error(203);                   (* UnzulÑssige Konstante   *)
+                     Error(203);                   (* Unzul√§ssige Konstante   *)
             END
-            ELSE                                   (* BereichsprÅfung         *)
+            ELSE                                   (* Bereichspr√ºfung         *)
             BEGIN
                Emit1(LoadInteger, Item.Ref^.RangeHigh);
                Emit1(CheckConstantRange, Item.Ref^.RangeLow);
@@ -382,7 +382,7 @@ BEGIN
    END
    ELSE Skip([ToSy, DownToSy, DoSy], 26);          (* Symbol := erwartet      *)
 
-   OutputCode := ForBeginUp;                       (* öbersetzung             *)
+   OutputCode := ForBeginUp;                       (* √úbersetzung             *)
 
    IF Sym IN [ToSy, DownToSy] THEN
    BEGIN
@@ -399,9 +399,9 @@ BEGIN
             BEGIN
                IF (Item2.Value < Item.Ref^.RangeLow) OR
                   (Item2.Value > Item.Ref^.RangeHigh) THEN
-                     Error(203);                   (* UnzulÑssige Konstante   *)
+                     Error(203);                   (* Unzul√§ssige Konstante   *)
             END
-            ELSE                                   (* BereichsprÅfung         *)
+            ELSE                                   (* Bereichspr√ºfung         *)
             BEGIN
                Emit1(LoadInteger, Item.Ref^.RangeHigh);
                Emit1(CheckConstantRange, Item.Ref^.RangeLow);
@@ -417,9 +417,9 @@ BEGIN
    IF Sym = DoSy THEN InSymbol
    ELSE Error(34);                                 (* Symbol Do erwartet      *)
 
-   LocCount1 := ProgCount;                         (* ProgrammzÑhler merken   *)
+   LocCount1 := ProgCount;                         (* Programmz√§hler merken   *)
    Emit(OutputCode);
-   LocCount2 := ProgCount;                         (* ProgrammzÑhler merken   *)
+   LocCount2 := ProgCount;                         (* Programmz√§hler merken   *)
    StackCorrection := StackCorrection + 3;         (* Stack Korrektur f. Goto *)
    Statement(Symbols);
    StackCorrection := StackCorrection - 3;         (* Stack Korrektur f. Goto *)
@@ -434,7 +434,7 @@ END; (* ForStatement *)
 PROCEDURE Assignment(ItemTarget : Node; FoundAt : INTEGER);
 VAR ItemSource : Node;                             (* Ausdruck, rechts von := *)
 BEGIN
-   IF ItemTarget.Obj = Functions THEN              (* RÅckgabe einer Funktion *)
+   IF ItemTarget.Obj = Functions THEN              (* R√ºckgabe einer Funktion *)
    BEGIN
       ItemTarget.Adr := 0;
       ItemTarget.Lev := ItemTarget.Lev + 1;
@@ -460,7 +460,7 @@ BEGIN
          BEGIN
             IF (ItemSource.Value < ItemTarget.Ref^.RangeLow) OR
                (ItemSource.Value > ItemTarget.Ref^.RangeHigh) THEN
-                  Error(203)                       (* UnzulÑssige Konstante   *)
+                  Error(203)                       (* Unzul√§ssige Konstante   *)
             ELSE Emit(StoreValue);                 (* Konstante speichern     *)
          END
          ELSE
@@ -537,7 +537,7 @@ BEGIN
    CASE CalledNumber OF
       1, 2 :                                       (* Read, ReadLn            *)
       BEGIN
-         FilePossible := TRUE;                     (* Dateivariable mîglich   *)
+         FilePossible := TRUE;                     (* Dateivariable m√∂glich   *)
 
          IF Sym = LeftParent THEN
          BEGIN
@@ -572,12 +572,12 @@ BEGIN
                               ;                    (* Nicht implementiert     *)
                            END;
                         END
-                        ELSE Error(64);            (* UnzulÑssige Eingabe     *)
+                        ELSE Error(64);            (* Unzul√§ssige Eingabe     *)
                      END;
                   END;
                END;
 
-               FilePossible := FALSE;              (* Dateien nicht mîglich   *)
+               FilePossible := FALSE;              (* Dateien nicht m√∂glich   *)
             UNTIL Sym <> Comma;
 
             IF Sym = RightParent THEN InSymbol
@@ -589,7 +589,7 @@ BEGIN
 
       3, 4 :                                       (* Write, WriteLn          *)
       BEGIN
-         FilePossible := TRUE;                     (* Dateivariable mîglich   *)
+         FilePossible := TRUE;                     (* Dateivariable m√∂glich   *)
 
          IF Sym = LeftParent THEN
          BEGIN
@@ -601,7 +601,7 @@ BEGIN
                IF Sym = Colon THEN                 (* Formatierte Ausgabe     *)
                BEGIN
                   IF NOT (Item.Typ IN [Ints, Reals, Bools, Chars]) THEN
-                     Error(64);                    (* UnzulÑssige Ausgabe     *)
+                     Error(64);                    (* Unzul√§ssige Ausgabe     *)
 
                   InSymbol;
                   Expression([Comma, Colon, RightParent] + Symbols, Item2);
@@ -629,7 +629,7 @@ BEGIN
                BEGIN
                   IF Item.Typ = Arrays THEN
                      IF Item.Ref^.ElementType^.Typ <> Chars THEN
-                        Error(64);                 (* UnzulÑssige Ausgabe     *)
+                        Error(64);                 (* Unzul√§ssige Ausgabe     *)
 
                   IF Item.Typ IN [Strings, Arrays] THEN
                      Emit1(WriteString, Item.Size)
@@ -644,9 +644,9 @@ BEGIN
                      ;                             (* Nicht implementiert     *)
                   END;
                END
-               ELSE Error(64);                     (* UnzulÑssige Ausgabe     *)
+               ELSE Error(64);                     (* Unzul√§ssige Ausgabe     *)
 
-               FilePossible := FALSE;              (* Dateien nicht mîglich   *)
+               FilePossible := FALSE;              (* Dateien nicht m√∂glich   *)
             UNTIL Sym <> Comma;
 
             IF Sym = RightParent THEN InSymbol

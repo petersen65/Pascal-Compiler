@@ -2,12 +2,12 @@
 (* Programmname    : TYPE.PAS                                           *)
 (* Programmautor   : Michael Rippl                                      *)
 (* Compiler        : Turbo Pascal V5.0                                  *)
-(* Letzte énderung : 13-Mar-1990                                        *)
+(* Letzte √Ñnderung : 13-Mar-1990                                        *)
 (* Inhalt          : Datentypen und Konstanten auswerten von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PARSER.PAS                       *)
 (************************************************************************)
 
-(* Typ-Referenz von Zeigern nachtrÑglich vervollstÑndigen *)
+(* Typ-Referenz von Zeigern nachtr√§glich vervollst√§ndigen *)
 PROCEDURE CompletePointer;
 VAR TypContent : pType;
     ObjContent,
@@ -35,7 +35,7 @@ BEGIN
    END;
 END; (* CompletePointer *)
 
-(* Konstanten jedes zulÑssigen Datentyps einlesen *)
+(* Konstanten jedes zul√§ssigen Datentyps einlesen *)
 PROCEDURE Constant(Symbols : SymbolSet; VAR Info : Node);
 VAR Sign,
     FoundAt      : INTEGER;
@@ -54,7 +54,7 @@ BEGIN
          WITH Info DO
          BEGIN
             new(Ref);
-            Push(Remember[Level], NIL, Ref);       (* Zum Lîschen merken      *)
+            Push(Remember[Level], NIL, Ref);       (* Zum L√∂schen merken      *)
             Ref^.Typ := Strings;
             Ref^.Size:= StringLen;                 (* Attribut vom Scanner    *)
             Value := IntNum;                       (* Attribut vom Scanner    *)
@@ -137,17 +137,17 @@ VAR VariableRemember : pRing;                      (* Variablen merken        *)
     Dummy            : pType;                      (* Variablenverbunde       *)
     Elt              : pNode;
     Found            : BOOLEAN;
-    Counter,                                       (* ZÑhler fÅr AufzÑhlungen *)
+    Counter,                                       (* Z√§hler f√ºr Aufz√§hlungen *)
     FoundAt,
-    RecOffset        : INTEGER;                    (* Offset fÅr Records      *)
+    RecOffset        : INTEGER;                    (* Offset f√ºr Records      *)
 
-(* Unterbereiche jedes zulÑssigen Datentypes auswerten *)
+(* Unterbereiche jedes zul√§ssigen Datentypes auswerten *)
 PROCEDURE SubrangeType(Symbols : SymbolSet; VAR Reference : pType);
 VAR Low,                                           (* Untere Grenze           *)
     High     : Node;                               (* Obere Grenze            *)
     Elt      : pNode;
     FoundAt  : INTEGER;
-    EnumType : pType;                              (* Basistyp bei AufzÑhlung *)
+    EnumType : pType;                              (* Basistyp bei Aufz√§hlung *)
 BEGIN
    WITH Low DO                                     (* Defaultwerte            *)
    BEGIN
@@ -155,7 +155,7 @@ BEGIN
       Size := IntSize;
       Value := 0;
       High.Value := 0;
-      Reference := NIL;                            (* Merkmal fÅr New         *)
+      Reference := NIL;                            (* Merkmal f√ºr New         *)
    END;
 
    IF Sym = Identifier THEN
@@ -171,7 +171,7 @@ BEGIN
 
             IF Elt^.Typ IN [Ints, Reals] THEN
                Error(130)                          (* Zu viele Elemente       *)
-            ELSE IF Elt^.Typ = Chars THEN          (* Menge Åber Char         *)
+            ELSE IF Elt^.Typ = Chars THEN          (* Menge √ºber Char         *)
             BEGIN
                WITH Low DO
                BEGIN
@@ -181,7 +181,7 @@ BEGIN
                   High.Value := 255;               (* Obere Grenze            *)
                END;
             END
-            ELSE IF Elt^.Typ = Bools THEN          (* Menge Åber Boolean      *)
+            ELSE IF Elt^.Typ = Bools THEN          (* Menge √ºber Boolean      *)
             BEGIN
                WITH Low DO
                BEGIN
@@ -191,7 +191,7 @@ BEGIN
                   High.Value := 1;                 (* Obere Grenze            *)
                END;
             END
-            ELSE IF Elt^.Typ = Enumerations THEN   (* Menge Åber AufzÑhlung   *)
+            ELSE IF Elt^.Typ = Enumerations THEN   (* Menge √ºber Aufz√§hlung   *)
             BEGIN
                WITH Low DO
                BEGIN
@@ -231,11 +231,11 @@ BEGIN
          END;
       END;
    END
-	ELSE IF Sym = LeftParent THEN							(* AufzÑhlungstyp				*)
+	ELSE IF Sym = LeftParent THEN							(* Aufz√§hlungstyp				*)
 	BEGIN
-		Typ(Symbols, EnumType);								(* AufzÑhlung auswerten		*)
+		Typ(Symbols, EnumType);								(* Aufz√§hlung auswerten		*)
 		New(Reference);
-		Push(Remember[Level], NIL, Reference);			(* Zum Lîschen merken		*)
+		Push(Remember[Level], NIL, Reference);			(* Zum L√∂schen merken		*)
 
 		WITH Reference^ DO
 		BEGIN
@@ -274,7 +274,7 @@ BEGIN
    IF Reference = NIL THEN                         (* Neuer Unterbereich      *)
    BEGIN
       new(Reference);
-      Push(Remember[Level], NIL, Reference);       (* Zum Lîschen merken      *)
+      Push(Remember[Level], NIL, Reference);       (* Zum L√∂schen merken      *)
 
       WITH Reference^ DO
       BEGIN
@@ -289,13 +289,13 @@ BEGIN
    Match(Symbols, [ ], 6);
 END; (* SubrangeType *)
 
-(* Beliebig dimensionale zulÑssige Datenfelder auswerten *)
+(* Beliebig dimensionale zul√§ssige Datenfelder auswerten *)
 PROCEDURE ArrayType(Symbols : SymbolSet; VAR Reference : pType);
 VAR Elt     : pNode;
     FoundAt : INTEGER;
 BEGIN
    new(Reference);
-   Push(Remember[Level], NIL, Reference);          (* Zum Lîschen merken      *)
+   Push(Remember[Level], NIL, Reference);          (* Zum L√∂schen merken      *)
 
    WITH Reference^ DO
    BEGIN
@@ -307,7 +307,7 @@ BEGIN
                    TypeBegSym, IndexType);         (* Index auswerten         *)
    END;
 
-   IF Sym = Comma THEN                             (* Hîhere Dimension        *)
+   IF Sym = Comma THEN                             (* H√∂here Dimension        *)
    BEGIN
       InSymbol;
       ArrayType(Symbols, Reference^.ElementType);  (* Elemente = Datenfelder  *)
@@ -338,12 +338,12 @@ VAR Found      : BOOLEAN;
     Labels,                                        (* Anzahl der Labels       *)
     Lev,                                           (* Level merken            *)
     RemOffset,                                     (* Aktueller Offset        *)
-    MaxOffset  : INTEGER;                          (* Grî·ter Offset          *)
+    MaxOffset  : INTEGER;                          (* Gr√∂√üter Offset          *)
     Elt,
     Elt1,
     Default    : pNode;
     Dummy,
-    TypeRef    : pType;                            (* Information Åber Typ    *)
+    TypeRef    : pType;                            (* Information √ºber Typ    *)
     CasesTable : ARRAY [1..CaseMax] OF INTEGER;    (* Case-Konstanten         *)
 
 (* Die Liste der Variablen einer Variante auswerten *)
@@ -383,7 +383,7 @@ BEGIN
          BEGIN
             Pop(Remember[Level], Elt, Dummy);
             Push(Remember[Level - 1], Elt, NIL);
-         END;                                      (* Lîschliste kopieren     *)
+         END;                                      (* L√∂schliste kopieren     *)
 
          Elt := Display[Level];                    (* Teilbaum merken         *)
          Display[Level] := NIL;
@@ -431,14 +431,14 @@ VAR Lab : Node;                                    (* Einzelnes Label         *)
 BEGIN
    Constant([Comma, Colon, EndSy] + Symbols, Lab);
 
-   IF Elt^.Typ = Subranges THEN                    (* EnthÑlt keine Defaults  *)
+   IF Elt^.Typ = Subranges THEN                    (* Enth√§lt keine Defaults  *)
    BEGIN
       WITH Elt^.Ref^ DO
       BEGIN
          IF RangeType <> Lab.Ref THEN
-            Error(152)                             (* UnzulÑssiges Case-Label *)
+            Error(152)                             (* Unzul√§ssiges Case-Label *)
          ELSE IF (Lab.Value < RangeLow) OR (Lab.Value > RangeHigh) THEN
-            Error(2);                              (* UnzulÑssige Konstante   *)
+            Error(2);                              (* Unzul√§ssige Konstante   *)
       END;
    END;
 
@@ -449,7 +449,7 @@ BEGIN
       k := 0;
       CasesTable[Labels] := Lab.Value;             (* Aktuelles Label merken  *)
 
-      REPEAT                                       (* PrÅfen ob Label doppelt *)
+      REPEAT                                       (* Pr√ºfen ob Label doppelt *)
          k := k + 1;
       UNTIL CasesTable[k] = Lab.Value;
 
@@ -479,8 +479,8 @@ END; (* OneVariant *)
 
 BEGIN (* VariantRecord *)
    InSymbol;                                       (* Case schon gelesen      *)
-   new(Default);                                   (* EnthÑlt Defaultwerte    *)
-   Push(Remember[Level - 1], Default, NIL);        (* Zum Lîschen merken      *)
+   new(Default);                                   (* Enth√§lt Defaultwerte    *)
+   Push(Remember[Level - 1], Default, NIL);        (* Zum L√∂schen merken      *)
    InitNode(Default^);
 
    IF Sym = Identifier THEN
@@ -494,7 +494,7 @@ BEGIN (* VariantRecord *)
 
       IF Found THEN                                (* Bezeichner ist Datentyp *)
       BEGIN
-         Elt := Default;                           (* EnthÑlt Defaultwerte    *)
+         Elt := Default;                           (* Enth√§lt Defaultwerte    *)
          Elt1 := Display[Level];                   (* Teilbaum merken         *)
          Display[Level] := NIL;
          Level := Level - 1;
@@ -516,7 +516,7 @@ BEGIN (* VariantRecord *)
          Insert(Id, Level, Variables, Elt, Found);
          InSymbol;
 
-         Pop(Remember[Level], Elt1, Dummy);        (* Lîschliste kopieren     *)
+         Pop(Remember[Level], Elt1, Dummy);        (* L√∂schliste kopieren     *)
          Push(Remember[Level - 1], Elt1, NIL);
 
          IF Sym = Colon THEN InSymbol
@@ -567,7 +567,7 @@ BEGIN (* VariantRecord *)
          MaxOffset := RecOffset;                   (* Maximalen Offset merken *)
    END;
 
-   RecOffset := MaxOffset;                         (* Gesamtgrî·e des Records *)
+   RecOffset := MaxOffset;                         (* Gesamtgr√∂√üe des Records *)
 
    WITH Elt^.Ref^ DO
    BEGIN
@@ -592,13 +592,13 @@ BEGIN (* Typ *)
          IF Sym = Identifier THEN
          BEGIN
             new(Reference);
-            Push(Remember[Level], NIL, Reference); (* Zum Lîschen merken      *)
-            Push(PointerRemember, NIL, Reference); (* VorwÑrtsbezogen, merken *)
+            Push(Remember[Level], NIL, Reference); (* Zum L√∂schen merken      *)
+            Push(PointerRemember, NIL, Reference); (* Vorw√§rtsbezogen, merken *)
 
             WITH Reference^ DO
             BEGIN
                Typ := Pointers;
-               Size := IntSize;                    (* Grî·e einer Adresse     *)
+               Size := IntSize;                    (* Gr√∂√üe einer Adresse     *)
                PointerType := NoTypeType;          (* Defaultwert             *)
                PointerTo := Id;                    (* Bezeichnername merken   *)
             END;
@@ -611,11 +611,11 @@ BEGIN (* Typ *)
             IF Sym IN TypeBegSym THEN Typ(Symbols, TypeRef);
          END;
       END
-      ELSE IF Sym = LeftParent THEN                (* AufzÑhlungstyp          *)
+      ELSE IF Sym = LeftParent THEN                (* Aufz√§hlungstyp          *)
       BEGIN
          InSymbol;
          new(Reference);
-         Push(Remember[Level], NIL, Reference);    (* Zum Lîschen merken      *)
+         Push(Remember[Level], NIL, Reference);    (* Zum L√∂schen merken      *)
          Counter := 0;
          Match([Identifier], [RightParent] + Symbols, 20);
 
@@ -696,7 +696,7 @@ BEGIN (* Typ *)
       BEGIN
          InSymbol;
          new(Reference);
-         Push(Remember[Level], NIL, Reference);    (* Zum Lîschen merken      *)
+         Push(Remember[Level], NIL, Reference);    (* Zum L√∂schen merken      *)
 
          WITH Reference^ DO
          BEGIN
@@ -720,7 +720,7 @@ BEGIN (* Typ *)
       BEGIN
          InSymbol;
          new(Reference);
-         Push(Remember[Level], NIL, Reference);    (* Zum Lîschen merken      *)
+         Push(Remember[Level], NIL, Reference);    (* Zum L√∂schen merken      *)
 
          WITH Reference^ DO
          BEGIN
@@ -765,7 +765,7 @@ BEGIN (* Typ *)
             InSymbol;
             Level := Level + 1;
             RecOffset := 0;
-            CreateRing(VariableRemember);          (* FÅr Datentyp merken     *)
+            CreateRing(VariableRemember);          (* F√ºr Datentyp merken     *)
 
             WHILE NOT (Sym IN [EndSy, CaseSy]) DO
             BEGIN
@@ -795,7 +795,7 @@ BEGIN (* Typ *)
                   BEGIN
                      Pop(Remember[Level], Elt, Dummy);
                      Push(Remember[Level - 1], Elt, NIL);
-                  END;                             (* Lîschliste kopieren     *)
+                  END;                             (* L√∂schliste kopieren     *)
 
                   Elt := Display[Level];           (* Teilbaum merken         *)
                   Display[Level] := NIL;
@@ -846,9 +846,9 @@ BEGIN (* Typ *)
                RecordTree := Display[Level];       (* Verbundvariablen        *)
             END;
 
-            Display[Level] := NIL;                 (* BinÑrbaum lîschen       *)
+            Display[Level] := NIL;                 (* Bin√§rbaum l√∂schen       *)
             Level := Level - 1;
-            DeleteRing(VariableRemember);          (* Listenkopf lîschen      *)
+            DeleteRing(VariableRemember);          (* Listenkopf l√∂schen      *)
          END
          ELSE
          BEGIN

@@ -2,15 +2,15 @@
 (* Programmname    : ERRORS.PAS                      *)
 (* Programmautor   : Michael Rippl                   *)
 (* Compiler        : Turbo Pascal V5.0               *)
-(* Letzte Žnderung : 13-Mar-1990                     *)
+(* Letzte Ã„nderung : 13-Mar-1990                     *)
 (* Inhalt          : Fehlerbehandlung von PASCAL.PAS *)
 (* Bemerkung       : Include-Datei von PASCAL.PAS    *)
 (*****************************************************)
 
-(* Gibt Fehlermeldung in verst„ndlicher Form aus *)
+(* Gibt Fehlermeldung in verstÃ¤ndlicher Form aus *)
 PROCEDURE PrintMessage(Number : INTEGER);
 BEGIN
-   write('³ ', Number : 3, ' : ');
+   write('â”‚ ', Number : 3, ' : ');
 
    CASE Number OF
       0   : write('illegal character in source file');
@@ -98,10 +98,10 @@ BEGIN
    END;
 
    gotoxy(80, wherey);                             (* Cursor positionieren    *)
-   write('³');
+   write('â”‚');
 END; (* PrintMessage *)
 
-(* Belegte Resourcen freigeben, vorw„rtsdeklariert *)
+(* Belegte Resourcen freigeben, vorwÃ¤rtsdeklariert *)
 PROCEDURE CleanUp; FORWARD;
 
 (* Fehlermenge einer Programmzeile ausgeben *)
@@ -110,13 +110,13 @@ VAR k      : INTEGER;
     Answer : CHAR;
 BEGIN
    gotoxy(1,wherey);                               (* Cursor positionieren    *)
-   write('³');
+   write('â”‚');
    gotoxy(80,wherey);                              (* Cursor positionieren    *)
-   write('³³');
+   write('â”‚â”‚');
    gotoxy(80,wherey);                              (* Cursor positionieren    *)
-   write('³³ errors at line ', LineNumber : 1, ' :');
+   write('â”‚â”‚ errors at line ', LineNumber : 1, ' :');
    gotoxy(80,wherey);                              (* Cursor positionieren    *)
-   write('³');
+   write('â”‚');
    ErrorPos := 0;
    k := 0;
 
@@ -128,8 +128,8 @@ BEGIN
       Errors := Errors - [k];
    END;
 
-   write('ÔÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ'); (* 40 Zeichen           *)
-   write('ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¾'); (* 40 Zeichen           *)
+   write('Ãˆâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•'); (* 40 Zeichen           *)
+   write('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•Â¥'); (* 40 Zeichen           *)
 
    IF NrOfErrors >= AbortingMax THEN               (* Fehlergrenze erreicht   *)
    BEGIN
@@ -152,24 +152,24 @@ END; (* PrintErrorSet *)
 
 (* Zeigt Fehlerprosition in Programmzeile und gibt Fehlernummer aus *)
 PROCEDURE Error(Number : INTEGER);
-VAR Length,                                        (* L„nge einer Zeile       *)
+VAR Length,                                        (* LÃ¤nge einer Zeile       *)
     k      : INTEGER;
 BEGIN
-   IF NrOfErrors = 0 THEN clrscr;                  (* Bildschirm l”schen      *)
+   IF NrOfErrors = 0 THEN clrscr;                  (* Bildschirm lÃ¶schen      *)
 
    IF ErrorPos = 0 THEN                            (* Erster Fehler in Zeile  *)
    BEGIN
       writeln;
-      write('ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ'); (* 40 Zeichen        *)
-      write('ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸³ ');
+      write('Ä±â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•'); (* 40 Zeichen        *)
+      write('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•Â©â”‚ ');
 
-      IF LineLen > 79 THEN Length := 78            (* Zeilel„nge begrenzen    *)
+      IF LineLen > 79 THEN Length := 78            (* ZeilelÃ¤nge begrenzen    *)
       ELSE Length := LineLen;
 
       FOR k := 1 TO Length - 2 DO write(Line[k]);  (* Programmzeile ausgeben  *)
 
       gotoxy(80, wherey);                          (* Cursor positionieren    *)
-      write('³');
+      write('â”‚');
    END;
 
    IF CharCount > ErrorPos THEN                    (* Platz zum Anzeigen      *)
@@ -179,7 +179,7 @@ BEGIN
 
       IF Number < 10 THEN ErrorPos := CharCount + 2
       ELSE IF (Number >= 10) AND (Number <= 99) THEN ErrorPos := CharCount + 3
-      ELSE ErrorPos := CharCount + 4;              (* N„chst m”glicher Platz  *)
+      ELSE ErrorPos := CharCount + 4;              (* NÃ¤chst mÃ¶glicher Platz  *)
    END;
 
    IF NOT (Number IN Errors) THEN                  (* Keine doppelten Fehler  *)
@@ -190,7 +190,7 @@ BEGIN
    END;
 END; (* Error *)
 
-(* Fataler Fehler fhrt zur Unterbrechung des šbersetzungsvorgangs *)
+(* Fataler Fehler fÃ¼hrt zur Unterbrechung des Ãœbersetzungsvorgangs *)
 PROCEDURE Fatal(Number : INTEGER);
 BEGIN
    IF ErrorPos <> 0 THEN PrintErrorSet;            (* Letzte Zeile hat Fehler *)

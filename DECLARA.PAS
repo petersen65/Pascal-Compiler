@@ -2,7 +2,7 @@
 (* Programmname    : DECLARA.PAS                  *)
 (* Programmautor   : Michael Rippl                *)
 (* Compiler        : Turbo Pascal V5.0            *)
-(* Letzte énderung : 18-Feb-1990                  *)
+(* Letzte √Ñnderung : 18-Feb-1990                  *)
 (* Inhalt          : Deklarationen                *)
 (* Bemerkung       : Include Datei von PARSER.PAS *)
 (**************************************************)
@@ -15,7 +15,7 @@ VAR VariableRemember : pRing;                      (* Variablen merken        *)
     Dummy,                                         (* Nur als Platzhalter     *)
     TypeRef          : pType;                      (* Datentyp der Parameter  *)
     Elt              : pNode;
-    TypeSize,                                      (* Grî·e des Datentyps     *)
+    TypeSize,                                      (* Gr√∂√üe des Datentyps     *)
     FoundAt          : INTEGER;
 BEGIN
    InSymbol;                                       (* LeftParent gelesen      *)
@@ -134,7 +134,7 @@ BEGIN
       Push(ProcElement^.Par, Elt, NIL);
    END;
 
-   DeleteRing(VariableRemember);                   (* Listenkopf lîschen      *)
+   DeleteRing(VariableRemember);                   (* Listenkopf l√∂schen      *)
 END; (* ParameterList *)
 
 (* Deklarierte Labels in Symboltabelle eintragen *)
@@ -212,7 +212,7 @@ BEGIN
 
       Constant([Semicolon, Comma, Identifier] + Symbols, ConstRef);
 
-      IF ConstRef.Typ = Enumerations THEN          (* AufzÑhlungskonstante    *)
+      IF ConstRef.Typ = Enumerations THEN          (* Aufz√§hlungskonstante    *)
          Error(123)                                (* Falsche Konstante       *)
       ELSE IF NOT Found THEN
       BEGIN
@@ -327,7 +327,7 @@ BEGIN
       MatchSemicolon;
    END;
 
-   DeleteRing(VariableRemember);                   (* Listenkopf lîschen      *)
+   DeleteRing(VariableRemember);                   (* Listenkopf l√∂schen      *)
 END; (* VariableDeclaration *)
 
 (* Deklarierte Prozeduren und Funktionen in Symboltabelle eintragen *)
@@ -352,12 +352,12 @@ BEGIN
    BEGIN
       IF Sym <> LeftParent THEN InSymbol;          (* Falls kein Programmname *)
 
-      IF Elt^.Adr <> IsForward THEN                (* VorwÑrtsdeklariert      *)
+      IF Elt^.Adr <> IsForward THEN                (* Vorw√§rtsdeklariert      *)
       BEGIN
          Error(72);                                (* Bereits vorhanden       *)
          Insert('----------------', Level, Nothing, Elt, Found);
 
-         IF NOT Found THEN CreateRing(Elt^.Par);   (* Liste fÅr Parameter     *)
+         IF NOT Found THEN CreateRing(Elt^.Par);   (* Liste f√ºr Parameter     *)
       END
       ELSE
       BEGIN
@@ -383,7 +383,7 @@ BEGIN
       IF IsFunction THEN Insert(Id, Level, Functions, Elt, Found)
       ELSE Insert(Id, Level, Procedures, Elt, Found);
 
-      CreateRing(Elt^.Par);                        (* Liste fÅr Parameter     *)
+      CreateRing(Elt^.Par);                        (* Liste f√ºr Parameter     *)
       IF Sym <> LeftParent THEN InSymbol;          (* Falls kein Programmname *)
    END;
 

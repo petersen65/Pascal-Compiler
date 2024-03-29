@@ -2,13 +2,13 @@
 (* Programmname    : EXPRESS.PAS                                        *)
 (* Programmautor   : Michael Rippl                                      *)
 (* Compiler        : Turbo Pascal V5.0                                  *)
-(* Letzte énderung : 28-Feb-1990                                        *)
-(* Inhalt          : Auswertung arithmetischer AusdrÅcke von PASCAL.PAS *)
+(* Letzte √Ñnderung : 28-Feb-1990                                        *)
+(* Inhalt          : Auswertung arithmetischer Ausdr√ºcke von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PARSER.PAS                       *)
 (************************************************************************)
 
-(* VorwÑrtsdeklariert *)
-(* Einfache AusdrÅcke (getrennt durch <, <=, <>, >, >=, =, in) auswerten *)
+(* Vorw√§rtsdeklariert *)
+(* Einfache Ausdr√ºcke (getrennt durch <, <=, <>, >, >=, =, in) auswerten *)
 PROCEDURE Expression;
 VAR Item2    : Node;                      (* Zweiter einfacher Ausdruck       *)
     Operator : Symbol;                    (* Operator =, <>, <, <=, >, >=, in *)
@@ -24,12 +24,12 @@ PROCEDURE Term(Symbols : SymbolSet; VAR Item : Node);
 VAR Item2    : Node;                          (* Zweiter Faktor               *)
     Operator : Symbol;                        (* Operator *, /, Div, Mod, And *)
 
-(* Konstanten, Variablen, Funktionen, Negationen, KlammerausdrÅcke auswerten *)
+(* Konstanten, Variablen, Funktionen, Negationen, Klammerausdr√ºcke auswerten *)
 PROCEDURE Factor(Symbols : SymbolSet; VAR Item : Node);
 VAR Elt        : pNode;
     FoundAt    : INTEGER;
 
-(* Standardfunktionen auswerten und Åbergebenen Ausdruck auf Typ ÅberprÅfen *)
+(* Standardfunktionen auswerten und √ºbergebenen Ausdruck auf Typ √ºberpr√ºfen *)
 PROCEDURE StandardFunction(FunctionNumber : INTEGER);
 VAR ParamType : TypeSet;                           (* Typ des Parameters      *)
     Param     : Node;
@@ -39,7 +39,7 @@ BEGIN
 
    Expression([RightParent] + Symbols, Param);
 
-   CASE FunctionNumber OF                          (* ZulÑssiger Parametertyp *)
+   CASE FunctionNumber OF                          (* Zul√§ssiger Parametertyp *)
       0, 2 :                                       (* abs, sqr                *)
       BEGIN
          ParamType := [Ints, Reals];
@@ -83,7 +83,7 @@ BEGIN
    BEGIN
       IF Param.Obj = Constants THEN                (* Konstanter Parameter    *)
       BEGIN
-         ProgCount := ProgCount - 1;               (* Einen Befehl lîschen    *)
+         ProgCount := ProgCount - 1;               (* Einen Befehl l√∂schen    *)
 
          WITH Item DO
          BEGIN
@@ -129,7 +129,7 @@ BEGIN
                5 :                                 (* chr                     *)
                BEGIN
                   IF (Value < 0) OR (Value > 255) THEN
-                     Error(203)                    (* UnzulÑssige Konstante   *)
+                     Error(203)                    (* Unzul√§ssige Konstante   *)
                   ELSE Emit1(LoadInteger, Value);
                END;
 
@@ -139,7 +139,7 @@ BEGIN
                7 :                                 (* succ                    *)
                BEGIN
                   IF (Param.Typ = Bools) AND (Value >= 1) THEN
-                     Error(203)                    (* UnzulÑssige Konstante   *)
+                     Error(203)                    (* Unzul√§ssige Konstante   *)
                   ELSE IF (Param.Typ = Chars) AND (Value >= 255) THEN
                      Error(203)
                   ELSE IF Param.Typ = Enumerations THEN
@@ -155,7 +155,7 @@ BEGIN
                8 :                                 (* pred                    *)
                BEGIN
                   IF (Param.Typ <> Ints) AND (Value <= 0) THEN
-                     Error(203)                    (* UnzulÑssige Konstante   *)
+                     Error(203)                    (* Unzul√§ssige Konstante   *)
                   ELSE Value := Value - 1;
 
                   Emit1(LoadInteger, Value);
@@ -220,7 +220,7 @@ BEGIN
 
          IF (FunctionNumber = 7) OR (FunctionNumber = 8) THEN
          BEGIN                                        (* succ oder pred       *)
-            IF Param.Typ = Bools THEN                 (* BereichsprÅfung      *)
+            IF Param.Typ = Bools THEN                 (* Bereichspr√ºfung      *)
             BEGIN
                Emit1(LoadInteger, 1);
                Emit1(CheckConstantRange, 0);
@@ -239,7 +239,7 @@ BEGIN
       END;
    END
    ELSE IF Param.Typ <> NoType THEN
-      Error(148);                                  (* UnzulÑssiger Parameter  *)
+      Error(148);                                  (* Unzul√§ssiger Parameter  *)
 
    IF Sym = RightParent THEN InSymbol
    ELSE Error(41);                                 (* Symbol ) erwartet       *)
@@ -329,7 +329,7 @@ BEGIN (* Factor *)
                   Ref := IntegerType;              (* Typ-Referenz            *)
                   Typ := Ref^.Typ;
                   Size := Ref^.Size;
-                  Obj := Constants;                (* FÅr Konstantenfaltung   *)
+                  Obj := Constants;                (* F√ºr Konstantenfaltung   *)
                   Value := IntNum;                 (* Wert der Konstanten     *)
                END;
 
@@ -343,7 +343,7 @@ BEGIN (* Factor *)
                   Ref := RealType;                 (* Typ-Referenz            *)
                   Typ := Ref^.Typ;
                   Size := Ref^.Size;
-                  Obj := Constants;                (* FÅr Konstantenfaltung   *)
+                  Obj := Constants;                (* F√ºr Konstantenfaltung   *)
                   Value := EnterReal(RealNum);     (* Wert der reellen Zahl   *)
 
                   Emit1(LoadReal, Value);
@@ -357,7 +357,7 @@ BEGIN (* Factor *)
                   Ref := CharType;                 (* Typ-Referenz            *)
                   Typ := Ref^.Typ;
                   Size := Ref^.Size;
-                  Obj := Constants;                (* FÅr Konstantenfaltung   *)
+                  Obj := Constants;                (* F√ºr Konstantenfaltung   *)
                   Value := IntNum;                 (* Code des Buchstabens    *)
                END;
 
@@ -369,7 +369,7 @@ BEGIN (* Factor *)
                WITH Item DO
                BEGIN
                   new(Ref);                        (* Neue Typ-Referenz       *)
-                  Push(Remember[Level], NIL, Ref); (* Zum Lîschen merken      *)
+                  Push(Remember[Level], NIL, Ref); (* Zum L√∂schen merken      *)
                   Ref^.Typ := Strings;
                   Ref^.Size:= StringLen;
                   Typ := Strings;
@@ -412,7 +412,7 @@ BEGIN (* Factor *)
             BEGIN
                IF Obj = Constants THEN             (* Konstantenfaltung       *)
                BEGIN
-                  ProgCount := ProgCount - 1;      (* Einen Befehl lîschen    *)
+                  ProgCount := ProgCount - 1;      (* Einen Befehl l√∂schen    *)
 
                   IF Value <> 0 THEN Value := 0    (* Wahrheitswert umdrehen  *)
                   ELSE Value := 1;
@@ -421,7 +421,7 @@ BEGIN (* Factor *)
                END
                ELSE Emit(MakeNot);                 (* Wahrheitswert umdrehen  *)
             END
-            ELSE IF Typ <> NoType THEN Error(138); (* Faktor mu· Boolean sein *)
+            ELSE IF Typ <> NoType THEN Error(138); (* Faktor mu√ü Boolean sein *)
          END;
       END
       ELSE IF Sym = NilSy THEN                     (* Nil Konstante           *)
@@ -431,7 +431,7 @@ BEGIN (* Factor *)
          WITH Item DO
          BEGIN
             Typ := Pointers;
-            Size := IntSize;                       (* Grî·e einer Adresse     *)
+            Size := IntSize;                       (* Gr√∂√üe einer Adresse     *)
             Ref := NoTypeType;                     (* Defaultwert             *)
             Obj := Constants;
          END;
@@ -466,7 +466,7 @@ BEGIN (* Term *)
               (Item.Typ IN [Ints, Reals, Bools]) AND
               (Item2.Typ IN [Ints, Reals, Bools]) THEN
       BEGIN                                        (* Konstantenfaltung       *)
-         ProgCount := ProgCount - 2;               (* Zwei Befehle lîschen    *)
+         ProgCount := ProgCount - 2;               (* Zwei Befehle l√∂schen    *)
 
          CASE Operator OF
             Mult :                                 (* Multiplikation          *)
@@ -671,7 +671,7 @@ BEGIN (* Term *)
                END
                ELSE
                BEGIN
-                  Error(139);                      (* Faktor mu· Integer sein *)
+                  Error(139);                      (* Faktor mu√ü Integer sein *)
 
                   WITH Item DO
                   BEGIN
@@ -729,7 +729,7 @@ BEGIN (* Term *)
 
             RealDiv :                              (* Real Division           *)
             BEGIN
-               IF Item2.Obj = Constants THEN       (* PrÅfung zur Compilezeit *)
+               IF Item2.Obj = Constants THEN       (* Pr√ºfung zur Compilezeit *)
                BEGIN
                   IF Item2.Typ = Reals THEN        (* Division durch Null     *)
                      IF RealTable[Item2.Value] = 0.0 THEN Error(201);
@@ -806,7 +806,7 @@ BEGIN (* Term *)
                END
                ELSE
                BEGIN
-                  Error(139);                      (* Faktor mu· Integer sein *)
+                  Error(139);                      (* Faktor mu√ü Integer sein *)
 
                   WITH Item DO
                   BEGIN
@@ -834,7 +834,7 @@ BEGIN (* SimpleExpression *)
          BEGIN
             IF Item.Obj = Constants THEN           (* Konstantenfaltung       *)
             BEGIN
-               ProgCount := ProgCount - 1;         (* Einen Befehl lîschen    *)
+               ProgCount := ProgCount - 1;         (* Einen Befehl l√∂schen    *)
 
                CASE Item.Typ OF
                   NoType : ;
@@ -891,7 +891,7 @@ BEGIN (* SimpleExpression *)
               (Item.Typ IN [Ints, Reals, Bools]) AND
               (Item2.Typ IN [Ints, Reals, Bools]) THEN
       BEGIN                                        (* Konstantenfaltung       *)
-         ProgCount := ProgCount - 2;               (* Zwei Befehle lîschen    *)
+         ProgCount := ProgCount - 2;               (* Zwei Befehle l√∂schen    *)
 
          CASE Operator OF
             OrSy :                                 (* Logisches Oder          *)
@@ -905,7 +905,7 @@ BEGIN (* SimpleExpression *)
                END
                ELSE
                BEGIN
-                  Error(138);                      (* Faktor mu· Boolean sein *)
+                  Error(138);                      (* Faktor mu√ü Boolean sein *)
 
                   WITH Item DO
                   BEGIN
@@ -1016,7 +1016,7 @@ BEGIN (* SimpleExpression *)
                   Emit(LogicalOr)
                ELSE
                BEGIN
-                  Error(138);                      (* Faktor mu· Boolean sein *)
+                  Error(138);                      (* Faktor mu√ü Boolean sein *)
 
                   WITH Item DO
                   BEGIN
@@ -1132,7 +1132,7 @@ BEGIN (* Expression *)
               (Item.Typ IN [Ints, Reals, Bools, Chars, Enumerations]) AND
               (Item2.Typ IN [Ints, Reals, Bools, Chars, Enumerations]) THEN
       BEGIN                                        (* Konstantenfaltung       *)
-         ProgCount := ProgCount - 2;               (* Zwei Befehle lîschen    *)
+         ProgCount := ProgCount - 2;               (* Zwei Befehle l√∂schen    *)
          Result := FALSE;                          (* Defaultwert             *)
 
          IF (Item.Typ IN [Ints, Bools, Chars, Enumerations]) AND
@@ -1145,7 +1145,7 @@ BEGIN (* Expression *)
                Leq  : Result := Item.Value <= Item2.Value;
                Gtr  : Result := Item.Value > Item2.Value;
                Geq  : Result := Item.Value >= Item2.Value;
-               InSy : Error(144);                  (* Operator unzulÑssig     *)
+               InSy : Error(144);                  (* Operator unzul√§ssig     *)
             END;
          END
          ELSE IF (Item.Typ = Ints) AND (Item2.Typ = Reals) THEN
@@ -1157,7 +1157,7 @@ BEGIN (* Expression *)
                Leq  : Result := Item.Value <= RealTable[Item2.Value];
                Gtr  : Result := Item.Value > RealTable[Item2.Value];
                Geq  : Result := Item.Value >= RealTable[Item2.Value];
-               InSy : Error(144);                  (* Operator unzulÑssig     *)
+               InSy : Error(144);                  (* Operator unzul√§ssig     *)
             END;
          END
          ELSE IF (Item.Typ = Reals) AND (Item2.Typ = Ints) THEN
@@ -1169,7 +1169,7 @@ BEGIN (* Expression *)
                Leq  : Result := RealTable[Item.Value] <= Item2.Value;
                Gtr  : Result := RealTable[Item.Value] > Item2.Value;
                Geq  : Result := RealTable[Item.Value] >= Item2.Value;
-               InSy : Error(144);                  (* Operator unzulÑssig     *)
+               InSy : Error(144);                  (* Operator unzul√§ssig     *)
             END;
          END
          ELSE IF (Item.Typ = Reals) AND (Item2.Typ = Reals) THEN
@@ -1181,7 +1181,7 @@ BEGIN (* Expression *)
                Leq  : Result := RealTable[Item.Value] <= RealTable[Item2.Value];
                Gtr  : Result := RealTable[Item.Value] > RealTable[Item2.Value];
                Geq  : Result := RealTable[Item.Value] >= RealTable[Item2.Value];
-               InSy : Error(144);                  (* Operator unzulÑssig     *)
+               InSy : Error(144);                  (* Operator unzul√§ssig     *)
             END;
          END
          ELSE Error(143);                          (* Typenvergleich verboten *)
@@ -1211,7 +1211,7 @@ BEGIN (* Expression *)
                Leq  : Emit(IntegerLeq);
                Gtr  : Emit(IntegerGtr);
                Geq  : Emit(IntegerGeq);
-               InSy : Error(144);                  (* Operator unzulÑssig     *)
+               InSy : Error(144);                  (* Operator unzul√§ssig     *)
             END;
          END
          ELSE IF (Item.Typ = Pointers) AND (Item2.Typ = Pointers) THEN
@@ -1223,7 +1223,7 @@ BEGIN (* Expression *)
 
             IF Operator = Eql THEN Emit(IntegerEql)
             ELSE IF Operator = Neq THEN Emit(IntegerNeq)
-            ELSE Error(144);                       (* Operator unzulÑssig     *)
+            ELSE Error(144);                       (* Operator unzul√§ssig     *)
          END
          ELSE IF (Item.Typ = Sets) AND (Item2.Typ = Sets) THEN
          BEGIN
@@ -1232,7 +1232,7 @@ BEGIN (* Expression *)
          ELSE IF (Item.Typ IN [Ints, Bools, Chars, Enumerations]) AND
             (Item2.Typ = Sets) THEN
          BEGIN
-            IF Operator <> InSy THEN Error(144)    (* Operator unzulÑssig     *)
+            IF Operator <> InSy THEN Error(144)    (* Operator unzul√§ssig     *)
             ELSE
             BEGIN
                ;                                   (* Nicht implementiert     *)
@@ -1262,7 +1262,7 @@ BEGIN (* Expression *)
                Leq  : Emit(RealLeq);
                Gtr  : Emit(RealGtr);
                Geq  : Emit(RealGeq);
-               InSy : Error(144);                  (* Operator unzulÑssig     *)
+               InSy : Error(144);                  (* Operator unzul√§ssig     *)
             END;
          END
          ELSE IF (Item.Typ IN [Strings, Arrays]) AND
@@ -1270,11 +1270,11 @@ BEGIN (* Expression *)
          BEGIN
             IF Item.Typ = Arrays THEN
                IF Item.Ref^.ElementType^.Typ <> Chars THEN
-                  Error(144);                      (* Operator unzulÑssig     *)
+                  Error(144);                      (* Operator unzul√§ssig     *)
 
             IF Item2.Typ = Arrays THEN
                IF Item2.Ref^.ElementType^.Typ <> Chars THEN
-                  Error(144);                      (* Operator unzulÑssig     *)
+                  Error(144);                      (* Operator unzul√§ssig     *)
 
             IF (Item.Typ = Arrays) AND (Item2.Typ = Arrays) THEN
             BEGIN
@@ -1290,7 +1290,7 @@ BEGIN (* Expression *)
                Leq  : Emit1(StringLeq, Item.Size);
                Gtr  : Emit1(StringGtr, Item.Size);
                Geq  : Emit1(StringGeq, Item.Size);
-               InSy : Error(144);                  (* Operator unzulÑssig     *)
+               InSy : Error(144);                  (* Operator unzul√§ssig     *)
             END;
          END
          ELSE Error(143);                          (* Typenvergleich verboten *)

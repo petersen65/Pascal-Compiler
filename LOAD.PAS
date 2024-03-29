@@ -7,21 +7,21 @@
 
 PROGRAM Load(input, output, source);
 
-CONST LevelMax    = 64;                            (* Hîchstes Level          *)
-		CodeMax     = 16380;                         (* Grî·tes Programm        *)
+CONST LevelMax    = 64;                            (* H√∂chstes Level          *)
+		CodeMax     = 16380;                         (* Gr√∂√ütes Programm        *)
 		StackMax    = 4096;                          (* Ende des Stacks         *)
       HeapBase    = 4097;                          (* Anfang des Heaps        *)
       HeapMax     = 8192;                          (* Ende des Heaps          *)
-      NumberMax   = 32767;                         (* 2^16-1 Grî·te Zahl      *)
-      StringMax   = 4096;                          (* Grî·e der Stringtablle  *)
-      RealMax     = 1024;                          (* Grî·e der Realtabelle   *)
+      NumberMax   = 32767;                         (* 2^16-1 Gr√∂√üte Zahl      *)
+      StringMax   = 4096;                          (* Gr√∂√üe der Stringtablle  *)
+      RealMax     = 1024;                          (* Gr√∂√üe der Realtabelle   *)
       NilAddress  = -1;                            (* Adresse von Nil-Zeigern *)
       ProcOffset  = 12;                            (* Belegter Stackbereich   *)
       WithOffset  = 4;                             (* Offset der With-Tabelle *)
-      IntField    = 10;                            (* Integer rechtsbÅndig    *)
-      CharField   = 1;                             (* Character rechtsbÅndig  *)
-      BoolField   = 10;                            (* Boolean rechtsbÅndig    *)
-      RealField   = 20;                            (* Real rechtsbÅndig       *)
+      IntField    = 10;                            (* Integer rechtsb√ºndig    *)
+      CharField   = 1;                             (* Character rechtsb√ºndig  *)
+      BoolField   = 10;                            (* Boolean rechtsb√ºndig    *)
+      RealField   = 20;                            (* Real rechtsb√ºndig       *)
 
 TYPE Orders = (LoadAddress, LoadValue, UpdateDisplay, CallProcedure,
                StoreWithAddress, LoadWithAddress, CorrectStack, CallStandard,
@@ -53,7 +53,7 @@ TYPE Orders = (LoadAddress, LoadValue, UpdateDisplay, CallProcedure,
 
      tCode  = ARRAY [0..CodeMax] OF Order;         (* Programmspeicher        *)
 
-VAR ProgramCounter,                                (* ProgrammzÑhler          *)
+VAR ProgramCounter,                                (* Programmz√§hler          *)
     Top,                                           (* Stackspitze             *)
     Base        : INTEGER;                         (* Basis eines Stackblocks *)
     source      : FILE;                            (* Quelldatei = Programm   *)
@@ -82,10 +82,10 @@ END; (* InitVariables *)
 PROCEDURE CleanUp;
 BEGIN
    dispose(Code);                                  (* Programmspeicher frei   *)
-   close(source);                                  (* Datei schlie·en         *)
+   close(source);                                  (* Datei schlie√üen         *)
 END; (* CleanUp *)
 
-(* öbergebene Parameter an den Lader ÅberprÅfen *)
+(* √úbergebene Parameter an den Lader √ºberpr√ºfen *)
 PROCEDURE CheckParameters;
 BEGIN
    write('Pascal Loader  Version 0.95a  ');
@@ -98,16 +98,16 @@ BEGIN
       halt;
    END;
 
-   (*$I-*)                                            (* I/O öberprÅfung aus  *)
+   (*$I-*)                                            (* I/O √úberpr√ºfung aus  *)
    assign(source, paramstr(1) + '.obj');
-   reset(source, 1);                                  (* Quelldatei îffnen    *)
+   reset(source, 1);                                  (* Quelldatei √∂ffnen    *)
 
    IF ioresult <> 0 THEN
    BEGIN
       writeln('fatal error : unable to open ', paramstr(1) + '.obj');
       halt;
    END;
-   (*$I+*)                                            (* I/O öberprÅfung an   *)
+   (*$I+*)                                            (* I/O √úberpr√ºfung an   *)
 END; (* CheckParameters *)
 
 (* ----------------------------- Datenaufnahme ------------------------------ *)
@@ -116,11 +116,11 @@ END; (* CheckParameters *)
 PROCEDURE ReadFile;
 VAR i,
     Status,                                        (* Kein I/O-Abbruch        *)
-    RealIndex,                                     (* Index fÅr Realtabelle   *)
-    StringIndex : INTEGER;                         (* Index fÅr Stringtabelle *)
-    Criterion   : ARRAY [1..6] OF CHAR;            (* Kennung fÅr Zieldatei   *)
+    RealIndex,                                     (* Index f√ºr Realtabelle   *)
+    StringIndex : INTEGER;                         (* Index f√ºr Stringtabelle *)
+    Criterion   : ARRAY [1..6] OF CHAR;            (* Kennung f√ºr Zieldatei   *)
 BEGIN
-   (*$I-*)                                         (* I/O öberprÅfung aus     *)
+   (*$I-*)                                         (* I/O √úberpr√ºfung aus     *)
    blockread(source, Criterion, sizeof(Criterion),
              Status);                              (* Dateikennung einlesen   *)
 
@@ -164,12 +164,12 @@ BEGIN
                                                    (* Adresse des Hauptprg's  *)
    blockread(source, ProgramCounter, sizeof(integer), Status);
    blockread(source, Top, sizeof(integer), Status);(* VarSize vom Programm    *)
-   (*$I+*)                                         (* I/O öberprÅfung an      *)
+   (*$I+*)                                         (* I/O √úberpr√ºfung an      *)
 END; (* ReadFile *)
 
 (* ---------------------------- Interpretation ------------------------------ *)
 
-(* Interpretiert den Åbersetzten Pseudocode *)
+(* Interpretiert den √ºbersetzten Pseudocode *)
 PROCEDURE Interpret;
 VAR ProgramStatus : (Run, Finish, UnknownCase, StackOverflow,
                      ConstantOutOfRange, IndexOutOfRange, DivisionByZero,
@@ -190,20 +190,20 @@ BEGIN
    Top := Top -1;                                  (* Neues StackTop          *)
 
                                                    (* Level 1 = Hauptprogramm *)
-   Display[1] := Base;                             (* Basis fÅr Level 1       *)
+   Display[1] := Base;                             (* Basis f√ºr Level 1       *)
    Stack[1].i := 0;                                (* Keine Return Adresse    *)
    Stack[2].i := 0;                                (* Kein Static Link        *)
    Stack[3].i := 0;                                (* Kein Dynamic Link       *)
 
    IF Top > StackMax THEN ProgramStatus := StackOverflow
-   ELSE ProgramStatus := Run;                      (* Programm lÑuft          *)
+   ELSE ProgramStatus := Run;                      (* Programm l√§uft          *)
 
    WHILE ProgramStatus = Run DO
    BEGIN
       Instruction := Code^[ProgramCounter];        (* Aktuellen Befehl merken *)
-      ProgramCounter := ProgramCounter + 1;        (* ProgrammzÑhler erhîhen  *)
+      ProgramCounter := ProgramCounter + 1;        (* Programmz√§hler erh√∂hen  *)
 
-      CASE Instruction.f OF                        (* AusfÅhrung von Befehlen *)
+      CASE Instruction.f OF                        (* Ausf√ºhrung von Befehlen *)
          LoadAddress :                             (* Adresse einer Variablen *)
          BEGIN                                     (* x = Level               *)
             Top := Top + 1;                        (* y = Offset              *)
@@ -234,12 +234,12 @@ BEGIN
 
          CallProcedure :                           (* Prozeduraufruf          *)
          BEGIN                                     (* x = Level von Proz.name *)
-                                                   (* y = Parametergrî·e - 1  *)
+                                                   (* y = Parametergr√∂√üe - 1  *)
             a0 := Top - Instruction.y;             (* Zeigt jetzt auf Basis   *)
             d0 := Instruction.x;
             a1 := a0 + Stack[a0].i;                (* Neues StackTop          *)
             Display[d0 + 1] := a0;                 (* Nun Basis von Level + 1 *)
-            Stack[a0 + 1].i := ProgramCounter + 1; (* RÅckkehradresse - 1     *)
+            Stack[a0 + 1].i := ProgramCounter + 1; (* R√ºckkehradresse - 1     *)
             Stack[a0 + 2].i := Display[d0];        (* Static Link             *)
             Stack[a0 + 3].i := Base;               (* Dynamic Link            *)
             Base := a0;                            (* Neue Basis              *)
@@ -305,8 +305,8 @@ BEGIN
          END;
 
          StoreArrayChar :                          (* Zeichenfeld speichern   *)
-         BEGIN                                     (* y = LÑnge des Feldes    *)
-            d0 := Instruction.y;                   (* LÑnge des Feldes        *)
+         BEGIN                                     (* y = L√§nge des Feldes    *)
+            d0 := Instruction.y;                   (* L√§nge des Feldes        *)
             a0 := Top - d0;
             a1 := Stack[a0].i;                     (* Zieladresse             *)
             a0 := a0 + 1;                          (* Quelladresse            *)
@@ -323,7 +323,7 @@ BEGIN
          END;
 
          LoadPointerAddress :                      (* Neue Zeigeradresse      *)
-         BEGIN                                     (* y = Grî·e des Datentyps *)
+         BEGIN                                     (* y = Gr√∂√üe des Datentyps *)
             Top := Top + 1;
 
             IF Top > StackMax THEN ProgramStatus := StackOverflow
@@ -366,7 +366,7 @@ BEGIN
                   d1 := 1;                         (* Schleifenende           *)
                   ProgramCounter := Code^[a0 + 1].y;
                END
-               ELSE a0 := a0 + 2;                  (* NÑchster Eintrag        *)
+               ELSE a0 := a0 + 2;                  (* N√§chster Eintrag        *)
             UNTIL d1 <> 0;
          END;
 
@@ -423,7 +423,7 @@ BEGIN
          END;
 
          MarkStack :                               (* Prozedur vorbereiten    *)
-         BEGIN                                     (* y = Variablengrî·e      *)
+         BEGIN                                     (* y = Variablengr√∂√üe      *)
             d0 := Instruction.y;
 
             IF Top + d0 > StackMax THEN ProgramStatus := StackOverflow
@@ -435,7 +435,7 @@ BEGIN
          END;
 
          SimpleArrayIndex :                        (* Feldindex auswerten     *)
-         BEGIN                                     (* Elementgrî·e ist 1      *)
+         BEGIN                                     (* Elementgr√∂√üe ist 1      *)
             d0 := Instruction.y;                   (* y = Untere Grenze       *)
             d1 := Stack[Top].i;                    (* Index                   *)
             Top := Top - 1;
@@ -444,17 +444,17 @@ BEGIN
          END;
 
          ArrayIndex :                              (* Feldindex auswerten     *)
-         BEGIN                                     (* Elementgrî·e beliebig   *)
+         BEGIN                                     (* Elementgr√∂√üe beliebig   *)
             d0 := Instruction.y;                   (* y = Untere Grenze       *)
             d1 := Stack[Top - 1].i;                (* Index                   *)
-            d2 := Stack[Top].i;                    (* Elementgrî·e            *)
+            d2 := Stack[Top].i;                    (* Elementgr√∂√üe            *)
             Top := Top - 2;
 
             Stack[Top].i := Stack[Top].i + (d1 - d0) * d2;
          END;
 
          LoadBlock :                               (* Speicherblock auf Stack *)
-         BEGIN                                     (* y = Grî·e des Blocks    *)
+         BEGIN                                     (* y = Gr√∂√üe des Blocks    *)
             a0 := Stack[Top].i;                    (* Quelladresse            *)
             Top := Top - 1;
             a1 := Top + Instruction.y;             (* Neue obere Grenze       *)
@@ -472,7 +472,7 @@ BEGIN
          END;
 
          CopyBlock :                               (* Speicherblock kopieren  *)
-         BEGIN                                     (* y = Grî·e des Blocks    *)
+         BEGIN                                     (* y = Gr√∂√üe des Blocks    *)
             a0 := Stack[Top - 1].i;                (* Zieladresse             *)
             a1 := Stack[Top].i;                    (* Quelladresse            *)
             a2 := a0 + Instruction.y;              (* Obere Grenze des Ziels  *)
@@ -488,9 +488,9 @@ BEGIN
          END;
 
          LoadStringConstant :                      (* Stringkonstante laden   *)
-         BEGIN                                     (* y = LÑnge des Strings   *)
+         BEGIN                                     (* y = L√§nge des Strings   *)
             a0 := Stack[Top].i;                    (* Adresse des Strings     *)
-            d0 := Instruction.y;                   (* LÑnge des Strings       *)
+            d0 := Instruction.y;                   (* L√§nge des Strings       *)
             Top := Top - 1;
             a1 := Top + d0;                        (* Neue Stackspitze        *)
 
@@ -541,7 +541,7 @@ BEGIN
             END;
          END;
 
-         CheckArrayIndex :                         (* Index von Feld prÅfen   *)
+         CheckArrayIndex :                         (* Index von Feld pr√ºfen   *)
          BEGIN                                     (* y = Untere Grenze       *)
             d0 := Instruction.y;                   (* Untere Grenze           *)
             d1 := Stack[Top].i;                    (* Obere Grenze            *)
@@ -551,7 +551,7 @@ BEGIN
             ELSE IF Stack[Top].i > d1 THEN ProgramStatus := IndexOutOfRange;
          END;
 
-         CheckConstantRange :                      (* BereichsÅberprÅfung     *)
+         CheckConstantRange :                      (* Bereichs√ºberpr√ºfung     *)
          BEGIN                                     (* y = Untere Grenze       *)
             d0 := Instruction.y;                   (* Untere Grenze           *)
             d1 := Stack[Top].i;                    (* Obere Grenze            *)
@@ -562,11 +562,11 @@ BEGIN
          END;
 
          StringEql :                               (* String =                *)
-         BEGIN                                     (* y = LÑnge der Strings   *)
-            d0 := Instruction.y;                   (* LÑnge der Strings       *)
+         BEGIN                                     (* y = L√§nge der Strings   *)
+            d0 := Instruction.y;                   (* L√§nge der Strings       *)
             a1 := Top - d0;                        (* Adresse -1 von String 2 *)
             a0 := a1 - d0;                         (* Adresse -1 von String 1 *)
-            a2 := a0 + 1;                          (* Adresse fÅr Ergebnis    *)
+            a2 := a0 + 1;                          (* Adresse f√ºr Ergebnis    *)
 
             REPEAT                                 (* Strings vergleichen     *)
                a0 := a0 + 1;
@@ -579,11 +579,11 @@ BEGIN
          END;
 
          StringNeq :                               (* String <>               *)
-         BEGIN                                     (* y = LÑnge der Strings   *)
-            d0 := Instruction.y;                   (* LÑnge der Strings       *)
+         BEGIN                                     (* y = L√§nge der Strings   *)
+            d0 := Instruction.y;                   (* L√§nge der Strings       *)
             a1 := Top - d0;                        (* Adresse -1 von String 2 *)
             a0 := a1 - d0;                         (* Adresse -1 von String 1 *)
-            a2 := a0 + 1;                          (* Adresse fÅr Ergebnis    *)
+            a2 := a0 + 1;                          (* Adresse f√ºr Ergebnis    *)
 
             REPEAT                                 (* Strings vergleichen     *)
                a0 := a0 + 1;
@@ -596,11 +596,11 @@ BEGIN
          END;
 
          StringLss :                               (* String <                *)
-         BEGIN                                     (* y = LÑnge der Strings   *)
-            d0 := Instruction.y;                   (* LÑnge der Strings       *)
+         BEGIN                                     (* y = L√§nge der Strings   *)
+            d0 := Instruction.y;                   (* L√§nge der Strings       *)
             a1 := Top - d0;                        (* Adresse -1 von String 2 *)
             a0 := a1 - d0;                         (* Adresse -1 von String 1 *)
-            a2 := a0 + 1;                          (* Adresse fÅr Ergebnis    *)
+            a2 := a0 + 1;                          (* Adresse f√ºr Ergebnis    *)
 
             REPEAT                                 (* Strings vergleichen     *)
                a0 := a0 + 1;
@@ -613,11 +613,11 @@ BEGIN
          END;
 
          StringLeq :                               (* String <=               *)
-         BEGIN                                     (* y = LÑnge der Strings   *)
-            d0 := Instruction.y;                   (* LÑnge der Strings       *)
+         BEGIN                                     (* y = L√§nge der Strings   *)
+            d0 := Instruction.y;                   (* L√§nge der Strings       *)
             a1 := Top - d0;                        (* Adresse -1 von String 2 *)
             a0 := a1 - d0;                         (* Adresse -1 von String 1 *)
-            a2 := a0 + 1;                          (* Adresse fÅr Ergebnis    *)
+            a2 := a0 + 1;                          (* Adresse f√ºr Ergebnis    *)
 
             REPEAT                                 (* Strings vergleichen     *)
                a0 := a0 + 1;
@@ -630,11 +630,11 @@ BEGIN
          END;
 
          StringGtr :                               (* String >                *)
-         BEGIN                                     (* y = LÑnge der Strings   *)
-            d0 := Instruction.y;                   (* LÑnge der Strings       *)
+         BEGIN                                     (* y = L√§nge der Strings   *)
+            d0 := Instruction.y;                   (* L√§nge der Strings       *)
             a1 := Top - d0;                        (* Adresse -1 von String 2 *)
             a0 := a1 - d0;                         (* Adresse -1 von String 1 *)
-            a2 := a0 + 1;                          (* Adresse fÅr Ergebnis    *)
+            a2 := a0 + 1;                          (* Adresse f√ºr Ergebnis    *)
 
             REPEAT                                 (* Strings vergleichen     *)
                a0 := a0 + 1;
@@ -647,11 +647,11 @@ BEGIN
          END;
 
          StringGeq :                               (* String >=               *)
-         BEGIN                                     (* y = LÑnge der Strings   *)
-            d0 := Instruction.y;                   (* LÑnge der Strings       *)
+         BEGIN                                     (* y = L√§nge der Strings   *)
+            d0 := Instruction.y;                   (* L√§nge der Strings       *)
             a1 := Top - d0;                        (* Adresse -1 von String 2 *)
             a0 := a1 - d0;                         (* Adresse -1 von String 1 *)
-            a2 := a0 + 1;                          (* Adresse fÅr Ergebnis    *)
+            a2 := a0 + 1;                          (* Adresse f√ºr Ergebnis    *)
 
             REPEAT                                 (* Strings vergleichen     *)
                a0 := a0 + 1;
@@ -665,7 +665,7 @@ BEGIN
 
          ReadValue :                               (* Wert einlesen           *)
          BEGIN                                     (* y = Datentyp            *)
-            (*$I-*)                                (* I/O öberprÅfung aus     *)
+            (*$I-*)                                (* I/O √úberpr√ºfung aus     *)
 
             CASE Instruction.y OF
                1 : read(Stack[Stack[Top].i].i);    (* Integer einlesen        *)
@@ -673,14 +673,14 @@ BEGIN
                4 : read(Stack[Stack[Top].i].c);    (* Character einlesen      *)
             END;
 
-            (*$I+*)                                (* I/O öberprÅfung an      *)
+            (*$I+*)                                (* I/O √úberpr√ºfung an      *)
 
             Top := Top - 1;
          END;
 
          WriteString :                             (* Texte ausgeben          *)
-         BEGIN                                     (* y = LÑnge des Strings   *)
-            d0 := Instruction.y;                   (* LÑnge des Strings       *)
+         BEGIN                                     (* y = L√§nge des Strings   *)
+            d0 := Instruction.y;                   (* L√§nge des Strings       *)
             a0 := Top - d0;                        (* Adresse des Strings - 1 *)
 
             WHILE Top > a0 DO                      (* Text ausgeben           *)
@@ -725,7 +725,7 @@ BEGIN
          ExitProcedure :                           (* Ende einer Prozedur     *)
          BEGIN
             Top := Base - 1;                       (* Daten v. Stack entfernt *)
-            ProgramCounter := Stack[Base + 1].i;   (* RÅckkehradresse         *)
+            ProgramCounter := Stack[Base + 1].i;   (* R√ºckkehradresse         *)
             Base := Stack[Base + 3].i;             (* Neue Base, Dynamic Link *)
          END;
 
@@ -733,7 +733,7 @@ BEGIN
          BEGIN
             Top := Base;                           (* Daten v. Stack entfernt *)
                                                    (* Fct Result auf Stacktop *)
-            ProgramCounter := Stack[Base + 1].i;   (* RÅckkehradresse         *)
+            ProgramCounter := Stack[Base + 1].i;   (* R√ºckkehradresse         *)
             Base := Stack[Base + 3].i;             (* Neue Base, Dynamic Link *)
          END;
 
@@ -905,7 +905,7 @@ BEGIN
             ELSE Stack[Top].r := Stack[Top].r / Stack[Top + 1].r;
          END;
 
-         CheckPointerAddress :                     (* Zeigeradresse prÅfen    *)
+         CheckPointerAddress :                     (* Zeigeradresse pr√ºfen    *)
          BEGIN
             IF Stack[Top].i < HeapBase THEN ProgramStatus := UndefinedPointer
             ELSE IF Stack[Top].i > HeapMax THEN

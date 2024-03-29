@@ -2,7 +2,7 @@
 (* Programmname    : PASCAL.PAS V1.0                         *)
 (* Programmautor   : Michael Rippl                           *)
 (* Compiler        : Turbo Pascal V5.0                       *)
-(* Letzte énderung : 05-Mar-1990                             *)
+(* Letzte √Ñnderung : 05-Mar-1990                             *)
 (* Inhalt          : Hauptprogramm des Compilers PASCAL V1.0 *)
 (* Bemerkung       : Hauptdatei von PASCAL.PAS V1.0          *)
 (*************************************************************)
@@ -20,9 +20,9 @@ USES Crt;                                          (* Ein/Ausgabe-Routinen    *)
 (*$I INITIAL.PAS*)                                 (* Initialisierungen       *)
 
 BEGIN (* Hauptprogramm *)
-   CheckParameters;                                (* Parameter ÅberprÅfen    *)
+   CheckParameters;                                (* Parameter √ºberpr√ºfen    *)
    InitVariables;                                  (* Vorinitialisierung      *)
-   Parser;                                         (* SyntaxÅberprÅfung       *)
+   Parser;                                         (* Syntax√ºberpr√ºfung       *)
 
    IF ErrorPos <> 0 THEN PrintErrorSet;            (* Zeile hatte Fehler      *)
    CleanUp;

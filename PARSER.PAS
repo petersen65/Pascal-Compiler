@@ -2,25 +2,25 @@
 (* Programmname    : PARSER.PAS                                           *)
 (* Programmautor   : Michael Rippl                                        *)
 (* Compiler        : Turbo Pascal V5.0                                    *)
-(* Letzte énderung : 13-Apr-1990                                          *)
-(* Inhalt          : SyntaxÅberprÅfung und Codegenerierung von PASCAL.PAS *)
+(* Letzte √Ñnderung : 13-Apr-1990                                          *)
+(* Inhalt          : Syntax√ºberpr√ºfung und Codegenerierung von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PASCAL.PAS                         *)
 (**************************************************************************)
 
-(* öbersetzung eines Prozedurkîrpers *)
+(* √úbersetzung eines Prozedurk√∂rpers *)
 PROCEDURE Block(Symbols : SymbolSet; Level : INTEGER; ProcElement : pNode;
                 IsFunction : BOOLEAN);
 VAR StackCorrection,                               (* Stack-Korrektur         *)
     WithLevel,                                     (* Level von With          *)
     DataOffset        : INTEGER;                   (* Stackoffset             *)
-    GotoRemember,                                  (* UnvollstÑndige Goto's   *)
+    GotoRemember,                                  (* Unvollst√§ndige Goto's   *)
     LabelRemember,                                 (* Deklarierte Labels      *)
     PointerRemember,                               (* Zeiger                  *)
     ProcedureRemember : pRing;                     (* Forward-Prozeduren      *)
     Elt               : pNode;
     FoundAt,
     NrOfBytes         : INTEGER;                   (* Schreiben in Datei      *)
-    Dummy             : pType;                     (* Dummy fÅr Funktionen    *)
+    Dummy             : pType;                     (* Dummy f√ºr Funktionen    *)
 
 (*$I TYPE.PAS*)                                    (* Datentypen, Konstanten  *)
 (*$I DECLARA.PAS*)                                 (* Deklarationen           *)
@@ -36,7 +36,7 @@ BEGIN
    ELSE IF Elt^.Adr <> NilAddress THEN Error(76)   (* Label zweimal definiert *)
    ELSE
    BEGIN
-      DeleteElement(LabelRemember, Elt);           (* Gemerktes Label lîschen *)
+      DeleteElement(LabelRemember, Elt);           (* Gemerktes Label l√∂schen *)
       Elt^.Adr := ProgCount;                       (* Aktuelle Adresse        *)
       Elt^.Stack := StackCorrection;               (* Stack-Korrektur         *)
    END;
@@ -54,8 +54,8 @@ PROCEDURE Statement(Symbols : SymbolSet);
 VAR Elt     : pNode;
     FoundAt : INTEGER;
 
-(* VorwÑrtsdeklariert *)
-(* Einfache AusdrÅcke (getrennt durch <, <=, <>, >, >=, =, in) auswerten *)
+(* Vorw√§rtsdeklariert *)
+(* Einfache Ausdr√ºcke (getrennt durch <, <=, <>, >, >=, =, in) auswerten *)
 PROCEDURE Expression(Symbols : SymbolSet; VAR Item : Node); FORWARD;
 
 (* Selektoren von Arrays, Records und Pointern auswerten *)
@@ -90,7 +90,7 @@ BEGIN
                END
                ELSE Error(73);                     (* Bezeichner unbekannt    *)
 
-               Display[Level] := NIL;              (* Teilbaum wieder lîschen *)
+               Display[Level] := NIL;              (* Teilbaum wieder l√∂schen *)
                Level := Level - 1;
             END;
 
@@ -108,7 +108,7 @@ BEGIN
             ELSE
             BEGIN
                Emit(LoadIndirectToTop);            (* Inhalt ist Adresse      *)
-               Emit(CheckPointerAddress);          (* Nil-Zugriff prÅfen      *)
+               Emit(CheckPointerAddress);          (* Nil-Zugriff pr√ºfen      *)
 
                Ref := Ref^.PointerType;            (* Typ-Referenz vom Zeiger *)
                Typ := Ref^.Typ;
@@ -136,7 +136,7 @@ BEGIN
                      BEGIN
                         IF (Index.Value < Ref^.IndexType^.RangeLow) OR
                            (Index.Value > Ref^.IndexType^.RangeHigh) THEN
-                              Error(200)           (* UnzulÑssiger Index      *)
+                              Error(200)           (* Unzul√§ssiger Index      *)
                         ELSE IF Ref^.ElementType^.Size = 1 THEN
                            Emit1(SimpleArrayIndex, Ref^.IndexType^.RangeLow)
                         ELSE
@@ -162,7 +162,7 @@ BEGIN
 
                   WITH Item DO
                   BEGIN
-                     Ref := Ref^.ElementType;      (* NÑchste Dimension       *)
+                     Ref := Ref^.ElementType;      (* N√§chste Dimension       *)
                      Typ := Ref^.Typ;
                      Size := Ref^.Size;
                   END;
@@ -183,7 +183,7 @@ BEGIN
    Match(Symbols, [ ], 6);
 END; (* Selector *)
 
-(* LÑdt die Adresse einer Variablen auf den Stack *)
+(* L√§dt die Adresse einer Variablen auf den Stack *)
 PROCEDURE LoadVarAddress(Symbols : SymbolSet; FoundAt : INTEGER;
                          VAR Item : Node);
 VAR OutputCode : Orders;
@@ -222,8 +222,8 @@ BEGIN
          new(CallRem);
          CallRem^ := CalledProcedure^;             (* Inhalt merken           *)
 
-         CallRem^.CallCount := ProgCount;          (* ProgrammzÑhler merken   *)
-         CallRem^.ProcAdr := CalledProcedure;      (* Daten spÑter bearbeiten *)
+         CallRem^.CallCount := ProgCount;          (* Programmz√§hler merken   *)
+         CallRem^.ProcAdr := CalledProcedure;      (* Daten sp√§ter bearbeiten *)
 
          IF Adr = IsForward THEN Push(ForwardCall[Lev], CallRem, NIL)
          ELSE Push(ForwardCall[Lev + 1], CallRem, NIL);
@@ -263,7 +263,7 @@ BEGIN
                      BEGIN
                         IF (Item.Value < Parameter^.Ref^.RangeLow) OR
                            (Item.Value > Parameter^.Ref^.RangeHigh) THEN
-                              Error(203);          (* UnzulÑssige Konstante   *)
+                              Error(203);          (* Unzul√§ssige Konstante   *)
                      END
                      ELSE
                      BEGIN
@@ -271,7 +271,7 @@ BEGIN
                         Emit1(CheckConstantRange, Item.Ref^.RangeLow);
                      END;
                   END
-                  ELSE Error(134);                 (* UnzulÑssiger Parameter  *)
+                  ELSE Error(134);                 (* Unzul√§ssiger Parameter  *)
                END
                ELSE IF (Parameter^.Typ = Arrays) AND (* Ganze Felder, Strings *)
                   (Item.Typ IN [Strings, Arrays]) THEN
@@ -315,7 +315,7 @@ BEGIN
                ELSE IF (Parameter^.Typ = Reals) AND (Item.Typ = Ints) THEN
                   Emit1(IntegerToReal, 0)
                ELSE IF (Parameter^.Typ <> NoType) AND (Item.Typ <> NoType) THEN
-                  Error(134);                      (* UnzulÑssiger Parameter  *)
+                  Error(134);                      (* Unzul√§ssiger Parameter  *)
             END
             ELSE                                   (* Call By Reference       *)
             BEGIN
@@ -364,8 +364,8 @@ BEGIN
          new(CallRem);
          CallRem^ := CalledProcedure^;             (* Inhalt merken           *)
 
-         CallRem^.CallCount := ProgCount;          (* ProgrammzÑhler merken   *)
-         CallRem^.ProcAdr := CalledProcedure;      (* Daten spÑter bearbeiten *)
+         CallRem^.CallCount := ProgCount;          (* Programmz√§hler merken   *)
+         CallRem^.ProcAdr := CalledProcedure;      (* Daten sp√§ter bearbeiten *)
 
          IF Adr = IsForward THEN Push(ForwardCall[Lev], CallRem, NIL)
          ELSE Push(ForwardCall[Lev + 1], CallRem, NIL);
@@ -376,7 +376,7 @@ BEGIN
    END;
 END; (* Call *)
 
-(*$I EXPRESS.PAS*)                                 (* Arithmetische AusdrÅcke *)
+(*$I EXPRESS.PAS*)                                 (* Arithmetische Ausdr√ºcke *)
 (*$I STATEMEN.PAS*)                                (* Pascal-Anweisungen      *)
 
 BEGIN (* Statement *)
@@ -407,7 +407,7 @@ BEGIN (* Statement *)
                   Functions :
                   BEGIN
                      IF ProcElement <> Elt THEN
-                        Error(160);                (* UnzulÑssige Zuweisung   *)
+                        Error(160);                (* Unzul√§ssige Zuweisung   *)
 
                      Assignment(Elt^, FoundAt);
                   END;
@@ -487,11 +487,11 @@ BEGIN (* Block *)
          Fatal(6);                                 (* Programm nicht Forward  *)
 
       IF ProcElement^.Adr = IsForward THEN
-         Error(62)                                 (* Prozedurkîrper erwartet *)
+         Error(62)                                 (* Prozedurk√∂rper erwartet *)
       ELSE
       BEGIN
          ProcElement^.Rem := Display[Level];       (* Parameter merken        *)
-         ProcElement^.Adr := IsForward;            (* VorwÑrtsdeklaration     *)
+         ProcElement^.Adr := IsForward;            (* Vorw√§rtsdeklaration     *)
          Display[Level] := NIL;                    (* Parameter entfernen     *)
       END;
    END
@@ -512,7 +512,7 @@ BEGIN (* Block *)
             ProcedureSy, FunctionSy :
             BEGIN
                IF NOT RingIsEmpty(PointerRemember) THEN
-                  CompletePointer;                 (* Zeiger vervollstÑndigen *)
+                  CompletePointer;                 (* Zeiger vervollst√§ndigen *)
 
                ProcedureDeclaration;
             END;
@@ -520,10 +520,10 @@ BEGIN (* Block *)
       END;
 
       IF DataOffset > StackMax THEN Fatal(7)       (* Nicht genug Speicher    *)
-      ELSE ProcElement^.VarSize := DataOffset;     (* Variablengrî·e merken   *)
+      ELSE ProcElement^.VarSize := DataOffset;     (* Variablengr√∂√üe merken   *)
 
       ProcElement^.Adr := ProgCount;               (* Adresse der Prozedur    *)
-      StackCorrection := 0;                        (* Korrekturwert fÅr Goto  *)
+      StackCorrection := 0;                        (* Korrekturwert f√ºr Goto  *)
       WithLevel := 0;                              (* Leveltiefe von With     *)
       Match([BeginSy], Symbols, 38);               (* Symbol begin erwartet   *)
 
@@ -531,27 +531,27 @@ BEGIN (* Block *)
          Error(84);                                (* Undefinierte Prozeduren *)
 
       IF NOT RingIsEmpty(PointerRemember) THEN
-         CompletePointer;                          (* Zeiger vervollstÑndigen *)
+         CompletePointer;                          (* Zeiger vervollst√§ndigen *)
 
       WHILE NOT RingIsEmpty(ForwardCall[Level]) DO (* Call's ohne Zieladresse *)
       BEGIN
          Pop(ForwardCall[Level], Elt, Dummy);
-         CreateRing(Elt^.Par);                     (* FÅr Lîschen wichtig     *)
-         Push(Remember[Level], Elt, NIL);          (* Zum Lîschen merken      *)
+         CreateRing(Elt^.Par);                     (* F√ºr L√∂schen wichtig     *)
+         Push(Remember[Level], Elt, NIL);          (* Zum L√∂schen merken      *)
 
-         WITH Elt^ DO                              (* Variablengrî·e          *)
+         WITH Elt^ DO                              (* Variablengr√∂√üe          *)
             Code^[CallCount].y := ProcAdr^.VarSize;
 
          Pop(ForwardCall[Level], Elt, Dummy);
-         CreateRing(Elt^.Par);                     (* FÅr Lîschen wichtig     *)
-         Push(Remember[Level], Elt, NIL);          (* Zum Lîschen merken      *)
+         CreateRing(Elt^.Par);                     (* F√ºr L√∂schen wichtig     *)
+         Push(Remember[Level], Elt, NIL);          (* Zum L√∂schen merken      *)
 
          WITH Elt^ DO                              (* Zieladresse             *)
             Code^[CallCount].y := ProcAdr^.Adr;
       END;
 
-      DeleteRing(PointerRemember);                 (* Liste komplett lîschen  *)
-      DeleteRing(ProcedureRemember);               (* Liste komplett lîschen  *)
+      DeleteRing(PointerRemember);                 (* Liste komplett l√∂schen  *)
+      DeleteRing(ProcedureRemember);               (* Liste komplett l√∂schen  *)
       CreateRing(GotoRemember);                    (* Goto's merken           *)
 
       IF Sym = BeginSy THEN InSymbol;              (* Kein Compound-Statement *)
@@ -590,15 +590,15 @@ BEGIN (* Block *)
          END;
       END;
 
-      DeleteLevel(Level);                          (* BinÑrbaum lîschen       *)
-      DeleteRing(GotoRemember);                    (* Liste komplett lîschen  *)
-      DeleteRing(LabelRemember);                   (* Liste komplett lîschen  *)
+      DeleteLevel(Level);                          (* Bin√§rbaum l√∂schen       *)
+      DeleteRing(GotoRemember);                    (* Liste komplett l√∂schen  *)
+      DeleteRing(LabelRemember);                   (* Liste komplett l√∂schen  *)
    END;
 
    Match([Period, Semicolon] + Symbols, [ ], 6);
 END; (* Block *)
 
-(* öberprÅfung und öbersetzung starten *)
+(* √úberpr√ºfung und √úbersetzung starten *)
 PROCEDURE Parser;
 VAR Elt       : pNode;
     Found     : BOOLEAN;
@@ -642,7 +642,7 @@ BEGIN
    IF Sym <> Period THEN Error(53);                (* Symbol . erwartet       *)
    Emit(StopProgram);                              (* Letzter Befehl          *)
 
-   (*$I-*)                                         (* I/O öberprÅfung aus     *)
+   (*$I-*)                                         (* I/O √úberpr√ºfung aus     *)
    blockwrite(target, Code^, sizeof(Order) * ProgCount, NrOfBytes);
    IF ioresult <> 0 THEN Fatal(8);                 (* Fehler beim Schreiben   *)
 
@@ -652,7 +652,7 @@ BEGIN
                                                    (* RealTable schreiben     *)
    blockwrite(target, RealTable, sizeof(REAL) * RealIndex, NrOfBytes);
 
-   StringIndex := StringIndex - 1;                 (* LÑnge aller Strings     *)
+   StringIndex := StringIndex - 1;                 (* L√§nge aller Strings     *)
    blockwrite(target, StringIndex, sizeof(INTEGER), NrOfBytes);
 
                                                    (* StringTable schreiben   *)
@@ -661,11 +661,11 @@ BEGIN
                                                    (* Adresse des Hauptprg's  *)
    blockwrite(target, Elt^.Adr, sizeof(INTEGER), NrOfBytes);
 
-                                                   (* Variablengrî·e vom Prg. *)
+                                                   (* Variablengr√∂√üe vom Prg. *)
    blockwrite(target, Elt^.VarSize, sizeof(INTEGER), NrOfBytes);
 
    IF ioresult <> 0 THEN Fatal(8);                 (* Fehler beim Schreiben   *)
-   (*$I+*)                                         (* I/O öberprÅfung an      *)
+   (*$I+*)                                         (* I/O √úberpr√ºfung an      *)
 END; (* Parser *)
 
 (* END PARSER.PAS *)

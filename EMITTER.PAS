@@ -2,7 +2,7 @@
 (* Programmname    : EMITTER.PAS                  *)
 (* Programmautor   : Michael Rippl                *)
 (* Compiler        : Turbo Pascal V5.0            *)
-(* Letzte énderung : 12-Apr-1990                  *)
+(* Letzte √Ñnderung : 12-Apr-1990                  *)
 (* Inhalt          : Codeerzeugung von PASCAL.PAS *)
 (* Bemerkung       : Include Datei von PASCAL.PAS *)
 (**************************************************)
@@ -10,7 +10,7 @@
 (* Funktion ohne Parameter *)
 PROCEDURE Emit(Func : Orders);
 BEGIN
-   IF ProgCount = CodeMax THEN Fatal(4);           (* Programm zu gro·        *)
+   IF ProgCount = CodeMax THEN Fatal(4);           (* Programm zu gro√ü        *)
 
    Code^[ProgCount].f := Func;
    ProgCount := ProgCount + 1;
@@ -19,7 +19,7 @@ END; (* Emit *)
 (* Funktion mit einem Parameter *)
 PROCEDURE Emit1(Func : Orders; Offset : INTEGER);
 BEGIN
-   IF ProgCount = CodeMax THEN Fatal(4);           (* Programm zu gro·        *)
+   IF ProgCount = CodeMax THEN Fatal(4);           (* Programm zu gro√ü        *)
 
    WITH Code^[ProgCount] DO
    BEGIN
@@ -33,7 +33,7 @@ END; (* Emit1 *)
 (* Funktion mit zwei Parametern *)
 PROCEDURE Emit2(Func : Orders; Level, Offset : INTEGER);
 BEGIN
-   IF ProgCount = CodeMax THEN Fatal(4);           (* Programm zu gro·        *)
+   IF ProgCount = CodeMax THEN Fatal(4);           (* Programm zu gro√ü        *)
 
    WITH Code^[ProgCount] DO
    BEGIN
